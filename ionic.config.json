@@ -1,0 +1,7 @@
+{
+  "name": "AulaMovil",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
