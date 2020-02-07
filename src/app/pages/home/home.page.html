@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-title>Aula Movil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="authService.signOut()">Salir</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header>Cíclo Escolar</ion-list-header>
+    <app-school-year (schoolYear)="schoolYearSelected($event)"></app-school-year>
+    <ion-list-header *ngIf="schoolYear">Grupos</ion-list-header>
+    <app-groups></app-groups>
+  </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="aula-movil">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button [disabled]="!schoolYear" (click)="groupsComponent.showAddGroup()">
+        <ion-icon name="contacts" [color]="schoolYear ? 'aula-movil' : 'medium'"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="schoolYearComponent.showAddSchoolYear()">
+        <ion-icon name="calendar" color="aula-movil"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

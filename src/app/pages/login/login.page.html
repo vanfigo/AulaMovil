@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="school"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Aula Movil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="help"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center ion-text-capitalize">Inicia Sesión</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list class="ion-margin-bottom">
+        <ion-item>
+          <ion-icon slot="start" name="mail"></ion-icon>
+          <ion-input clear-input placeholder="Correo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="key"></ion-icon>
+          <ion-input clear-input type="password" placeholder="Contraseña"></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-button expand="block" color="primary">Ingresar</ion-button>
+      <ion-button expand="block" color="danger" (click)="authService.googleSignIn()">Iniciar con Google</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

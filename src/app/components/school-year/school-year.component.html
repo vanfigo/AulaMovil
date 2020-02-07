@@ -1,0 +1,14 @@
+<ion-item>
+  <ion-icon slot="start" name="calendar"></ion-icon>
+  <ion-select placeholder="Selecciona un cíclo escolar" okText="Aceptar" #schoolYearSelect
+              [interfaceOptions]="customAlertOptions" cancelText="Cancelar"
+              (ionChange)="this.schoolYear.emit($event.detail.value)">
+    <ion-select-option *ngFor="let schoolYear of schoolYears | async" [value]="schoolYear">
+      {{schoolYear.name}}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
+<ion-button color="danger" size="block" fill="solid" class="ion-margin"
+            [disabled]="!schoolYearSelect.value" (click)="showAlertDeleteSchoolYear()">
+  <ion-icon name="trash"></ion-icon>Borrar cíclo escolar
+</ion-button>
