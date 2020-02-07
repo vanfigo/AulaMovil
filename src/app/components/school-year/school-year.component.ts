@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
 import {SchoolYear} from '../../models/school-year.class';
-import {AlertController, IonSelect, PickerController, ToastController} from '@ionic/angular';
+import {IonInput, PickerController} from '@ionic/angular';
 import * as moment from 'moment';
 import {DocumentSnapshot} from '@angular/fire/firestore';
 import {SchoolYearsService} from '../../services/school-years.service';
@@ -13,64 +12,28 @@ import {SchoolYearsService} from '../../services/school-years.service';
 })
 export class SchoolYearComponent implements OnInit {
 
-  schoolYears: Observable<SchoolYear[]>;
-  @ViewChild(IonSelect, {static: false}) schoolYearSelect: IonSelect;
   @Output() schoolYear = new EventEmitter<SchoolYear>();
-  customAlertOptions: any = {
-    header: 'Cíclo Escolar',
-    message: 'Ve tus grupos del cíclo escolar',
-    translucent: true
-  };
+  @ViewChild(IonInput, {static: false}) schoolYearSelect: IonInput;
 
   constructor(private schoolYearsService: SchoolYearsService,
-              private pickerController: PickerController,
-              private toastController: ToastController,
-              private alertController: AlertController) {
-    this.schoolYears = schoolYearsService.findAll();
+              private pickerController: PickerController) {
   }
 
   ngOnInit() {}
-
-  showAlertDeleteSchoolYear = () => {
-    const schoolYear: SchoolYear = this.schoolYearSelect.value;
-    this.alertController.create({
-      header: 'Eliminar Cíclo Escolar',
-      subHeader: `¿Estás seguro que quieres eliminar el ciclo escolar ${schoolYear.name}?`,
-      buttons: [{
-        role: 'cancel',
-        text: 'Cancelar'
-      }, {
-        text: 'Eliminar',
-        handler: () => this.deleteSchoolYear(schoolYear)
-      }]
-    }).then(alert => alert.present());
-  }
-
-  deleteSchoolYear = (schoolYear: SchoolYear) => {
-    this.schoolYearsService.delete(schoolYear.uid)
-      .then(() => {
-        this.toastController.create({
-          message: `El cíclo escolar ${schoolYear.name} ha sido eliminado`,
-          duration: 3000
-        }).then(toaster => {
-          toaster.present();
-          this.schoolYearSelect.value = null;
-        });
-      });
-  }
 
   showAddSchoolYear = async () => {
     const options = [];
     for (let i = -2; i < 10; i++) {
       const date = moment().add(i, 'years');
+      const schoolYear = new SchoolYear(date.toDate());
       options.push({
-        value: date,
-        text: date.format('YYYY')
+        value: schoolYear,
+        text: schoolYear.name
       });
     }
     const picker = await this.pickerController.create({
       columns: [{
-        name: 'years',
+        name: 'schoolYear',
         options
       }],
       buttons: [{
@@ -85,32 +48,21 @@ export class SchoolYearComponent implements OnInit {
   }
 
   createSchoolYear = (value) => {
-    const schoolYear = new SchoolYear(value.years.value.toDate());
+    const schoolYear: SchoolYear = value.schoolYear.value;
     this.schoolYearsService.findByUid(schoolYear.uid)
-      .toPromise().then(async (storedSchoolYear: DocumentSnapshot<SchoolYear>) => {
-      if (storedSchoolYear.exists) {
-        this.toastController.create({
-          message: `El cíclo escolar ${schoolYear.name} ya existe`,
-          duration: 3000
-        }).then(toaster => toaster.present());
-      } else {
-        this.schoolYearsService.save(schoolYear)
-          .then(async () => {
-            this.toastController.create({
-              message: `El cíclo escolar ${schoolYear.name} fue creado exitosamente`,
-              duration: 3000
-            }).then(toaster => {
-              this.schoolYearSelect.open();
-              toaster.present();
-            });
-          });
-      }
-    });
+      .subscribe((document: DocumentSnapshot<SchoolYear>) => {
+        if (!document.exists) {
+          this.schoolYearsService.save(schoolYear)
+            .then(() => this.schoolYearSelected(schoolYear));
+        } else {
+          this.schoolYearSelected(document.data());
+        }
+      });
   }
 
-  schoolYearSelected = (event: CustomEvent) => {
-    console.log(event.detail.value);
-    this.schoolYear.emit(event.detail.value);
+  schoolYearSelected = (schoolYear: SchoolYear) => {
+    this.schoolYearSelect.value = schoolYear.name;
+    this.schoolYear.emit(schoolYear);
   }
 
 }
