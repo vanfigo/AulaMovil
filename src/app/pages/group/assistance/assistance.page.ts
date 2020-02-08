@@ -7,6 +7,7 @@ import {Assistance} from '../../../models/assistance.class';
 import {AssistancesService} from '../../../services/assistances.service';
 import * as moment from 'moment';
 import {DocumentSnapshot} from '@angular/fire/firestore';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-assistance',
@@ -19,6 +20,7 @@ export class AssistancePage implements OnInit {
   students: Student[];
   selectedStudents: Student[] = [];
   assistanceDate: Date;
+  studentCheckBoxSub = new Subscription();
   @ViewChildren(IonCheckbox) studentCheckbox: QueryList<IonCheckbox>;
   monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -28,25 +30,33 @@ export class AssistancePage implements OnInit {
               private assistanceService: AssistancesService,
               private toastController: ToastController) {
     studentsService.findAllByGroupUid().subscribe(students => {
-        this.studentsService.students = students;
-        this.students = students;
-        this.loading = false;
-      });
+      this.studentsService.students = students;
+      this.students = students;
+      this.loading = false;
+    });
   }
 
   ngOnInit() { }
 
   ionViewDidEnter() {
-    if (this.selectedStudents.length > 0) {
-      this.selectedStudents.forEach((student: Student) => {
-        this.studentCheckbox.find((checkBox: IonCheckbox) => checkBox.name === student.uid).checked = true;
-      });
-    }
+    this.studentCheckBoxSub = this.studentCheckbox.changes.subscribe(this.updateSelectedCheckBox);
   }
+
+  ionViewWillLeave() {
+    this.studentCheckBoxSub.unsubscribe();
+  }
+
+  updateSelectedCheckBox = () => this.studentCheckbox.forEach((checkBox: IonCheckbox) => {
+    if (this.selectedStudents.find((student: Student) => checkBox.name === student.uid)) {
+      checkBox.checked = true;
+    }
+  })
 
   selectStudent = (event: CustomEvent, student: Student) => {
     if (event.detail.checked) {
-      this.selectedStudents.push(student);
+      if (!this.selectedStudents.find(selectedStudent => selectedStudent.uid === student.uid)) {
+        this.selectedStudents.push(student);
+      }
     } else {
       this.selectedStudents = this.selectedStudents.filter((storedStudent: Student) => storedStudent.uid !== student.uid);
     }

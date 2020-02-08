@@ -26,7 +26,7 @@ export class StudentsService {
 
   getCollectionStudents = () => this.getDocumentGroup().collection(this.collectionName);
 
-  findAllByGroupUid = (groupUid: string) => this.getDocumentGroup()
+  findAllByGroupUid = () => this.getDocumentGroup()
     .collection(this.collectionName, ref => ref.orderBy('name')).snapshotChanges()
     .pipe(map((documents: DocumentChangeAction<Student>[]) =>
       documents.map((action: DocumentChangeAction<Student>) => {

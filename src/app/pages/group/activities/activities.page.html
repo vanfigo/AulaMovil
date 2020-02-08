@@ -38,7 +38,7 @@
         <ion-icon name="book" color="aula-movil"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
-    <ion-fab-list side="start">
+    <ion-fab-list side="start" *ngIf="activities?.length > 1">
       <ion-fab-button (click)="reorder = !reorder">
         <ion-icon name="reorder" color="aula-movil"></ion-icon>
       </ion-fab-button>
