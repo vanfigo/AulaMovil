@@ -13,7 +13,7 @@ import {ModalActivitiesComponent} from '../../../components/modal/modal-activiti
 export class ActivitiesPage implements OnInit {
 
   loading = true;
-  reorder = true;
+  disableReorder = true;
   activities: Activity[];
   filteredActivities: Activity[];
 
@@ -64,6 +64,7 @@ export class ActivitiesPage implements OnInit {
   }
 
   filterActivities = (event: CustomEvent) => {
+    this.disableReorder = true;
     const filterValue: string = event.detail.value.toLowerCase();
     if (filterValue.length > 0) {
       this.activities = this.filteredActivities.filter(activity => filterValue.split(' ').every(filter =>
@@ -73,13 +74,12 @@ export class ActivitiesPage implements OnInit {
     }
   }
 
-  doReorder = (event: CustomEvent) => {
+  doReorder = async (event: CustomEvent) => {
     const {from, to} = event.detail;
+    const fixedTo = to === this.activities.length ? to - 1 : to; // fix for some weird behavior
     const fromActivity = this.activities[from];
-    const toActivity = this.activities[to];
-    this.activitiesService.changePosition(fromActivity.uid, from + 1, toActivity.uid, to + 1)
-      .then(console.log)
-      .catch(console.error);
+    const toActivity = this.activities[fixedTo];
+    await this.activitiesService.changePosition(fromActivity.uid, from + 1, toActivity.uid, fixedTo + 1);
     event.detail.complete();
   }
 
