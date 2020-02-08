@@ -1,27 +1,34 @@
 <ion-content>
   <ion-item>
     <ion-label>Asistencia</ion-label>
-    <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha de asistencia" cancelText="Cancelar" doneText="Seleccionar"
+    <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha de asistencia"
+                  cancelText="Cancelar" doneText="Seleccionar" [monthNames]="monthNames"
                   #datetime (ionChange)="searchAssistance(datetime)"></ion-datetime>
   </ion-item>
-  <div *ngIf="datetime.value">
-    <ion-searchbar placeholder="Busca alumnos" cancelButtonIcon (ionChange)="filterStudents($event)"></ion-searchbar>
-    <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
-    <div *ngIf="!loading">
-      <ion-card *ngIf="students.length === 0">
-        <ion-card-header color="medium">
-          <ion-card-title>No hay estudiantes en este grupo</ion-card-title>
-        </ion-card-header>
-      </ion-card>
-      <ion-list *ngIf="students.length > 0">
-        <ion-item>
-          <ion-note slot="end" class="ion-text-end">Falta</ion-note>
-        </ion-item>
-        <ion-item *ngFor="let student of students">
-          <ion-label>{{student.name}} {{student.lastName}}</ion-label>
-          <ion-checkbox slot="end" color="aula-movil" [name]="student.uid" (ionChange)="selectStudent($event, student)"></ion-checkbox>
-        </ion-item>
-      </ion-list>
-    </div>
-  </div>
+  <ion-searchbar placeholder="Busca alumnos" class="ion-padding" cancelButtonIcon
+                 (ionChange)="filterStudents($event)"></ion-searchbar>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <ion-list *ngIf="!loading">
+    <ion-card *ngIf="students.length === 0; else studentsInGroup">
+      <ion-card-header color="medium">
+        <ion-card-title>No se encontraron estudiantes</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+    <ng-template #studentsInGroup>
+      <ion-item>
+        <ion-note slot="end" class="ion-text-end">Falta</ion-note>
+      </ion-item>
+      <ion-item *ngFor="let student of students">
+        <ion-label>{{student.name}} {{student.lastName}}</ion-label>
+        <ion-checkbox slot="end" color="aula-movil" [name]="student.uid"
+                      (ionChange)="selectStudent($event, student)"></ion-checkbox>
+      </ion-item>
+    </ng-template>
+  </ion-list>
+  <ion-fab horizontal="end" vertical="bottom">
+    <ion-fab-button color="aula-movil" (click)="saveAssistance()"
+                    [disabled]="!datetime.value">
+      <ion-icon name="save"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

@@ -1,8 +1,8 @@
 <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
 <ion-header *ngIf="!loading">
-  <ion-toolbar>
+  <ion-toolbar color="aula-movil">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" text="Regresar"></ion-back-button>
+      <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Grupo {{groupsService.group?.name}}</ion-title>
   </ion-toolbar>

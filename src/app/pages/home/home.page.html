@@ -14,15 +14,12 @@
     <app-groups></app-groups>
   </ion-list>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="aula-movil">
+    <ion-fab-button color="aula-movil" [disabled]="!schoolYear">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button [disabled]="!schoolYear" (click)="groupsComponent.showAddGroup()">
-        <ion-icon name="contacts" [color]="schoolYear ? 'aula-movil' : 'medium'"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="schoolYearComponent.showAddSchoolYear()">
-        <ion-icon name="calendar" color="aula-movil"></ion-icon>
+      <ion-fab-button (click)="groupsComponent.showAddGroup()">
+        <ion-icon name="contacts" color="aula-movil"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>

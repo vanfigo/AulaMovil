@@ -8,8 +8,10 @@ export class Student {
   creationDate: Date | Timestamp;
 
   constructor(name: string, lastName: string) {
-    this.name = name;
-    this.lastName = lastName;
+    this.name = name.toLowerCase().split(' ')
+      .map(subName => subName.charAt(0).toUpperCase() + subName.substring(1)).join(' ');
+    this.lastName = lastName.toLowerCase().split(' ')
+      .map(subName => subName.charAt(0).toUpperCase() + subName.substring(1)).join(' ');
     this.uid = null;
     this.creationDate = new Date();
   }
