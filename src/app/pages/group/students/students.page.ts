@@ -44,10 +44,12 @@ export class StudentsPage implements OnInit {
       inputs: [{
         type: 'text',
         name: 'name',
+        label: 'Nombre(s)',
         placeholder: 'Nombres del alumno'
       }, {
         type: 'text',
         name: 'lastName',
+        label: 'Apellido(s)',
         placeholder: 'Apellidos del alumno'
       }],
       buttons: [{
