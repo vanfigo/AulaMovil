@@ -19,12 +19,14 @@ export class StudentsService {
               private schoolYearsService: SchoolYearsService,
               private groupsService: GroupsService) { }
 
-  getCollectionGroups = () =>
+  getDocumentGroup = () =>
     this.db.collection('users').doc(this.authService.user.uid)
       .collection('schoolYears').doc(this.schoolYearsService.schoolYearUid)
-      .collection('groups')
+      .collection('groups').doc(this.groupsService.group.uid)
 
-  findAllByGroupUid = (groupUid: string) => this.getCollectionGroups().doc(groupUid)
+  getCollectionStudents = () => this.getDocumentGroup().collection(this.collectionName);
+
+  findAllByGroupUid = (groupUid: string) => this.getDocumentGroup()
     .collection(this.collectionName, ref => ref.orderBy('name')).snapshotChanges()
     .pipe(map((documents: DocumentChangeAction<Student>[]) =>
       documents.map((action: DocumentChangeAction<Student>) => {
@@ -34,14 +36,11 @@ export class StudentsService {
       })
     ))
 
-  save = (student: Student) => this.getCollectionGroups().doc(this.groupsService.group.uid)
-    .collection(this.collectionName).add({...student})
+  save = (student: Student) => this.getCollectionStudents().add({...student});
 
-  update = (uid: string, student: Student) => this.getCollectionGroups().doc(this.groupsService.group.uid)
-    .collection(this.collectionName).doc(uid).set({...student})
+  update = (uid: string, student: Student) => this.getCollectionStudents().doc(uid).set({...student});
 
-  delete = (uid: string) => this.getCollectionGroups().doc(this.groupsService.group.uid)
-    .collection(this.collectionName).doc(uid).delete()
+  delete = (uid: string) => this.getCollectionStudents().doc(uid).delete();
 
   filterStudents = (filterValue: string) => this.students
     .filter(student => filterValue.split(' ').every(filter =>

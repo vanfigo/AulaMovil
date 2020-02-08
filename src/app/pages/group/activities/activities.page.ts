@@ -1,4 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+import {ActivitiesService} from '../../../services/activities.service';
+import {GroupsService} from '../../../services/groups.service';
+import {Activity} from '../../../models/activity.class';
+import {AlertController, ModalController, ToastController} from '@ionic/angular';
+import {ModalActivitiesComponent} from '../../../components/modal/modal-activities/modal-activities.component';
 
 @Component({
   selector: 'app-activities',
@@ -7,9 +12,75 @@ import {Component, OnInit} from '@angular/core';
 })
 export class ActivitiesPage implements OnInit {
 
-  constructor() { }
+  loading = true;
+  reorder = true;
+  activities: Activity[];
+  filteredActivities: Activity[];
 
-  ngOnInit() {
+  constructor(private activitiesService: ActivitiesService,
+              private groupsService: GroupsService,
+              private modalController: ModalController,
+              private alertController: AlertController,
+              private toastController: ToastController) {
+    activitiesService.findAllByGroupUid().subscribe(activities => {
+        this.activities = activities;
+        this.filteredActivities = activities;
+        this.loading = false;
+      });
+  }
+
+  ngOnInit() { }
+
+  showAddActivity = () => this.modalController.create({
+    component: ModalActivitiesComponent
+  }).then(modal => modal.present())
+
+  showEditActivity = (activity: Activity) => this.modalController.create({
+    component: ModalActivitiesComponent,
+    componentProps: { activity }
+  }).then(modal => modal.present())
+
+  showDeleteActivity = (activity: Activity) => {
+    this.alertController.create({
+      header: 'Eliminar Actividad',
+      subHeader: `¿Está seguro que desea eliminar la actividad?`,
+      message: `Actividad ${activity.position}: ${activity.name}`,
+      buttons: [{
+        role: 'cancel',
+        text: 'Cancelar'
+      }, {
+        text: 'Eliminar',
+        handler: (value) => {
+          this.activitiesService.delete(activity)
+            .then(() => {
+              this.toastController.create({
+                message: `La <strong>Actividad ${activity.position}: ${activity.name}</strong> ha sido eliminada correctamente`,
+                duration: 3000
+              }).then(toast => toast.present());
+            });
+        }
+      }]
+    }).then(alert => alert.present());
+  }
+
+  filterActivities = (event: CustomEvent) => {
+    const filterValue: string = event.detail.value.toLowerCase();
+    if (filterValue.length > 0) {
+      this.activities = this.filteredActivities.filter(activity => filterValue.split(' ').every(filter =>
+          activity.name.toLowerCase().indexOf(filter) >= 0));
+    } else {
+      this.activities = [...this.filteredActivities];
+    }
+  }
+
+  doReorder = (event: CustomEvent) => {
+    const {from, to} = event.detail;
+    const fromActivity = this.activities[from];
+    const toActivity = this.activities[to];
+    this.activitiesService.changePosition(fromActivity.uid, from + 1, toActivity.uid, to + 1)
+      .then(console.log)
+      .catch(console.error);
+    event.detail.complete();
   }
 
 }
