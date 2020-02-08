@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, DocumentChangeAction} from '@angular/fire/firestore';
+import {AngularFirestore, DocumentChangeAction} from '@angular/fire/firestore';
 import {AuthService} from './auth.service';
 import {GroupsService} from './groups.service';
 import {SchoolYearsService} from './school-years.service';
@@ -12,19 +12,20 @@ import {Student} from '../models/student.class';
 export class StudentsService {
 
   collectionName = 'students';
-  collectionGroups: AngularFirestoreCollection;
+  students: Student[];
 
   constructor(private db: AngularFirestore,
               private authService: AuthService,
               private schoolYearsService: SchoolYearsService,
-              private groupsService: GroupsService) {
-    this.collectionGroups = db.collection('users').doc(authService.user.uid)
-      .collection('schoolYears').doc(schoolYearsService.schoolYearUid)
-      .collection('groups');
-  }
+              private groupsService: GroupsService) { }
 
-  findAllByGroupUid = (groupUid: string) => this.collectionGroups.doc(groupUid)
-    .collection(this.collectionName).snapshotChanges()
+  getCollectionGroups = () =>
+    this.db.collection('users').doc(this.authService.user.uid)
+      .collection('schoolYears').doc(this.schoolYearsService.schoolYearUid)
+      .collection('groups')
+
+  findAllByGroupUid = (groupUid: string) => this.getCollectionGroups().doc(groupUid)
+    .collection(this.collectionName, ref => ref.orderBy('name')).snapshotChanges()
     .pipe(map((documents: DocumentChangeAction<Student>[]) =>
       documents.map((action: DocumentChangeAction<Student>) => {
         const student: Student = action.payload.doc.data();
@@ -33,13 +34,17 @@ export class StudentsService {
       })
     ))
 
-  save = (student: Student) => this.collectionGroups.doc(this.groupsService.group.uid)
+  save = (student: Student) => this.getCollectionGroups().doc(this.groupsService.group.uid)
     .collection(this.collectionName).add({...student})
 
-  update = (uid: string, student: Student) => this.collectionGroups.doc(this.groupsService.group.uid)
+  update = (uid: string, student: Student) => this.getCollectionGroups().doc(this.groupsService.group.uid)
     .collection(this.collectionName).doc(uid).set({...student})
 
-  delete = (uid: string) => this.collectionGroups.doc(this.groupsService.group.uid)
+  delete = (uid: string) => this.getCollectionGroups().doc(this.groupsService.group.uid)
     .collection(this.collectionName).doc(uid).delete()
 
+  filterStudents = (filterValue: string) => this.students
+    .filter(student => filterValue.split(' ').every(filter =>
+      student.name.toLowerCase().indexOf(filter) >= 0 ||
+      student.lastName.toLowerCase().indexOf(filter) >= 0))
 }

@@ -5,7 +5,6 @@ import {FormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
 
 import {StudentsPage} from './students.page';
-import {StudentsModule} from '../../../components/students/students.module';
 import {StudentsPageRoutingModule} from './students-routing.module';
 
 @NgModule({
@@ -13,8 +12,7 @@ import {StudentsPageRoutingModule} from './students-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    StudentsPageRoutingModule,
-    StudentsModule
+    StudentsPageRoutingModule
   ],
   declarations: [StudentsPage]
 })

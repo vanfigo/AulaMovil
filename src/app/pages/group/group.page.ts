@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {GroupsService} from '../../services/groups.service';
 import {SchoolYearsService} from '../../services/school-years.service';
 import {Group} from '../../models/group.class';
+import {StudentsService} from '../../services/students.service';
 
 @Component({
   selector: 'app-group',
@@ -13,19 +14,19 @@ export class GroupPage implements OnInit {
 
   loading = true;
 
-  constructor(private activatedRoute: ActivatedRoute,
-              public groupsService: GroupsService,
-              private schoolYearsService: SchoolYearsService) {
+  constructor(public groupsService: GroupsService,
+              private activatedRoute: ActivatedRoute,
+              private schoolYearsService: SchoolYearsService,
+              private studentsService: StudentsService) {
     schoolYearsService.schoolYearUid = activatedRoute.snapshot.params.schoolYearUid;
-    groupsService.findByUid(activatedRoute.snapshot.params.uid)
-      .toPromise().then((group: Group) => {
-      groupsService.group = group;
-      this.loading = false;
-    });
+    const groupUid = activatedRoute.snapshot.params.uid;
+    groupsService.findByUid(groupUid)
+      .subscribe((group: Group) => {
+        groupsService.group = group;
+        this.loading = false;
+      });
   }
 
-
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }
