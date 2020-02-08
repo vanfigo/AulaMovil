@@ -27,8 +27,7 @@ export class AssistancePage implements OnInit {
               private groupsService: GroupsService,
               private assistanceService: AssistancesService,
               private toastController: ToastController) {
-    studentsService.findAllByGroupUid(groupsService.group.uid)
-      .subscribe(students => {
+    studentsService.findAllByGroupUid().subscribe(students => {
         this.studentsService.students = students;
         this.students = students;
         this.loading = false;
