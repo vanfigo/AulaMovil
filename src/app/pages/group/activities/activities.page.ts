@@ -4,6 +4,7 @@ import {GroupsService} from '../../../services/groups.service';
 import {Activity} from '../../../models/activity.class';
 import {AlertController, ModalController, ToastController} from '@ionic/angular';
 import {ModalActivitiesComponent} from '../../../components/modal/modal-activities/modal-activities.component';
+import {ModalActivityGradesComponent} from '../../../components/modal/modal-activity-grades/modal-activity-grades.component';
 
 @Component({
   selector: 'app-activities',
@@ -81,6 +82,13 @@ export class ActivitiesPage implements OnInit {
     const toActivity = this.activities[fixedTo];
     await this.activitiesService.changePosition(fromActivity.uid, from + 1, toActivity.uid, fixedTo + 1);
     event.detail.complete();
+  }
+
+  showSaveGrades = (activity: Activity) => {
+    this.modalController.create({
+      component: ModalActivityGradesComponent,
+      componentProps: { activity }
+    }).then(alert => alert.present());
   }
 
 }
