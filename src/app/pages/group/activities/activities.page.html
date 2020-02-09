@@ -17,10 +17,11 @@
           <ion-icon name="trash" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
-      <ion-item detail button>
+      <ion-item detail button (click)="showSaveGrades(activity)">
         <ion-reorder slot="start"></ion-reorder>
         <ion-label>
           <span>Actividad {{activity.position}}: {{activity.name}}</span>
+          <p *ngIf="!activity.dueDate">Sin fecha de entrega</p>
           <p>{{activity.dueDate | date: 'mediumDate'}}</p>
         </ion-label>
         <ion-badge color="aula-movil" slot="end">Mínimo: {{activity.minScore}}</ion-badge>

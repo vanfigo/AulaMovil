@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-button (click)="modalController.dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Capturar Calificaciones</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveGrades()">
+        <ion-icon slot="icon-only" name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-searchbar placeholder="Busca alumnos" class="ion-padding" cancelButtonIcon
+                 (ionChange)="filterStudents($event)"></ion-searchbar>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <ion-card *ngIf="students?.length === 0">
+    <ion-card-header color="medium">
+      <ion-card-title>No se encontraron estudiantes</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-list [formGroup]="scoreFormGroup">
+    <ion-item *ngFor="let student of students">
+      <ion-label>{{student.name}} {{student.lastName}}</ion-label>
+      <ion-input slot="end" [name]="student.uid" type="number"
+                 placeholder="Calificación" class="ion-text-end" [min]="activity.minScore" max="10"
+                 [formControlName]="student.uid"></ion-input>
+      <ion-note color="danger" slot="end" *ngIf="scoreFormGroup.get(student.uid).errors?.required">requerido</ion-note>
+      <ion-note color="danger" slot="end" *ngIf="scoreFormGroup.get(student.uid).errors?.min">minimo {{activity.minScore}}</ion-note>
+      <ion-note color="danger" slot="end" *ngIf="scoreFormGroup.get(student.uid).errors?.max">máximo 10</ion-note>
+    </ion-item>
+  </ion-list>
+</ion-content>
