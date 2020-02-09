@@ -10,3 +10,16 @@ exports.createUser = functions.auth.user().onCreate((userRecord, context) => {
     photoURL: userRecord.photoURL
   });
 });
+
+exports.updateStudentsTotal = functions.firestore.document('users/{userUid}/schoolYears/{yearUid}/groups/{groupUid}/students/{studentUid}')
+  .onWrite((snapshot, context) => {
+    const studentRef = snapshot.after.ref;
+    const studentCollection = studentRef.parent;
+    if (studentRef.parent.parent) {
+      const groupRef = studentRef.parent.parent;
+      return studentCollection.listDocuments().then((documents) =>
+        groupRef.update({students: documents.length})
+      ).catch(console.error);
+    }
+    return null;
+});
