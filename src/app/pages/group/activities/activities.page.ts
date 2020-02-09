@@ -1,17 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivitiesService} from '../../../services/activities.service';
 import {GroupsService} from '../../../services/groups.service';
 import {Activity} from '../../../models/activity.class';
 import {AlertController, ModalController, ToastController} from '@ionic/angular';
 import {ModalActivitiesComponent} from '../../../components/modal/modal-activities/modal-activities.component';
 import {ModalActivityGradesComponent} from '../../../components/modal/modal-activity-grades/modal-activity-grades.component';
+import {DeactivatableComponent} from '../../../interfaces/deactivable-component.interface';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-activities',
   templateUrl: './activities.page.html',
   styleUrls: ['./activities.page.scss'],
 })
-export class ActivitiesPage implements OnInit {
+export class ActivitiesPage implements DeactivatableComponent {
 
   loading = true;
   disableReorder = true;
@@ -30,7 +32,15 @@ export class ActivitiesPage implements OnInit {
       });
   }
 
-  ngOnInit() { }
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.modalController.getTop()
+      .then((top: HTMLElement | undefined) => {
+        if (top) {
+          this.modalController.dismiss();
+        }
+        return top === undefined;
+      });
+  }
 
   showAddActivity = () => this.modalController.create({
     component: ModalActivitiesComponent
@@ -85,11 +95,9 @@ export class ActivitiesPage implements OnInit {
     await this.activitiesService.changePosition(fromActivity.uid, from + 1, toActivity.uid, fixedTo + 1);
   }
 
-  showSaveGrades = (activity: Activity) => {
-    this.modalController.create({
+  showSaveGrades = (activity: Activity) => this.modalController.create({
       component: ModalActivityGradesComponent,
       componentProps: { activity }
-    }).then(alert => alert.present());
-  }
+    }).then(modal => modal.present())
 
 }

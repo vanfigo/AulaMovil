@@ -25,7 +25,6 @@
         <ion-datetime display-format="DD/MMMM/YYYY"
                       cancelText="Cancelar" doneText="Seleccionar"
                       [monthNames]="monthNames" formControlName="dueDate"></ion-datetime>
-        <ion-note color="danger" slot="end" *ngIf="formActivity.get('dueDate').errors?.required">requerido</ion-note>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Calificación Mínima</ion-label>
