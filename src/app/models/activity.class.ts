@@ -1,5 +1,5 @@
 import * as firebase from 'firebase';
-import {Student} from './student.class';
+import {Grade} from './grade.class';
 import Timestamp = firebase.firestore.Timestamp;
 
 export class Activity {
@@ -7,7 +7,7 @@ export class Activity {
   name?: string;
   position: number;
   minScore: number;
-  students: Student[];
+  grades: Grade[];
   dueDate: Date | Timestamp;
   creationDate: Date | Timestamp;
 
@@ -16,7 +16,7 @@ export class Activity {
     this.dueDate = dueDate;
     this.minScore = minScore;
     this.creationDate = new Date();
-    this.students = [];
+    this.grades = [];
   }
 
 }
