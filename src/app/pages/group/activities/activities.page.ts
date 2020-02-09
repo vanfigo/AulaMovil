@@ -78,10 +78,11 @@ export class ActivitiesPage implements OnInit {
   doReorder = async (event: CustomEvent) => {
     const {from, to} = event.detail;
     const fixedTo = to === this.activities.length ? to - 1 : to; // fix for some weird behavior
+    console.log(fixedTo);
     const fromActivity = this.activities[from];
     const toActivity = this.activities[fixedTo];
-    await this.activitiesService.changePosition(fromActivity.uid, from + 1, toActivity.uid, fixedTo + 1);
     event.detail.complete();
+    await this.activitiesService.changePosition(fromActivity.uid, from + 1, toActivity.uid, fixedTo + 1);
   }
 
   showSaveGrades = (activity: Activity) => {
