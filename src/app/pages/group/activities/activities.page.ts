@@ -88,7 +88,6 @@ export class ActivitiesPage implements DeactivatableComponent {
   doReorder = async (event: CustomEvent) => {
     const {from, to} = event.detail;
     const fixedTo = to === this.activities.length ? to - 1 : to; // fix for some weird behavior
-    console.log(fixedTo);
     const fromActivity = this.activities[from];
     const toActivity = this.activities[fixedTo];
     event.detail.complete();
