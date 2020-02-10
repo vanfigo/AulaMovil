@@ -27,13 +27,15 @@ export class StudentsService {
   getCollectionStudents = () => this.getDocumentGroup().collection(this.collectionName);
 
   findAllByGroupUid = () => this.getDocumentGroup()
-    .collection(this.collectionName, ref => ref.orderBy('name')).snapshotChanges()
-    .pipe(map((documents: DocumentChangeAction<Student>[]) =>
-      documents.map((action: DocumentChangeAction<Student>) => {
-        const student: Student = action.payload.doc.data();
-        const uid: string = action.payload.doc.id;
-        return { ...student, uid};
-      })
+    .collection(this.collectionName, ref => ref.orderBy('lastName')).snapshotChanges()
+    .pipe(map((documents: DocumentChangeAction<Student>[]) => {
+        let listNumber = 1;
+        return documents.map((action: DocumentChangeAction<Student>) => {
+          const student: Student = action.payload.doc.data();
+          const uid: string = action.payload.doc.id;
+          return { ...student, listNumber: listNumber++, uid};
+        });
+      }
     ))
 
   save = (student: Student) => this.getCollectionStudents().add({...student});
@@ -42,8 +44,14 @@ export class StudentsService {
 
   delete = (uid: string) => this.getCollectionStudents().doc(uid).delete();
 
-  filterStudents = (filterValue: string) => this.students
-    .filter(student => filterValue.split(' ').every(filter =>
-      student.name.toLowerCase().indexOf(filter) >= 0 ||
-      student.lastName.toLowerCase().indexOf(filter) >= 0))
+  filterStudents = (filterValue: string | number): Student[] => {
+    if (typeof filterValue === 'string' && isNaN(Number(filterValue))) {
+      return this.students
+        .filter(student => filterValue.split(' ').every(filter =>
+          student.name.toLowerCase().indexOf(filter) >= 0 ||
+          student.lastName.toLowerCase().indexOf(filter) >= 0));
+    } else {
+      return this.students.filter(student => student.listNumber === Number(filterValue));
+    }
+  }
 }

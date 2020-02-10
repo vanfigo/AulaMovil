@@ -18,7 +18,7 @@ export class ModalActivityGradesComponent implements OnInit {
   students: Student[];
   @Input() activity: Activity;
   scoreFormGroup: FormGroup;
-  scoreControl: FormControl;
+  toolbarErrorText: string;
 
   constructor(public modalController: ModalController,
               private studentsService: StudentsService,
@@ -33,7 +33,7 @@ export class ModalActivityGradesComponent implements OnInit {
         this.students = students;
         this.students.forEach(student => {
           const grade: Grade = this.activity.grades.find(storedGrade => storedGrade.studentUid === student.uid);
-          const formControl = new FormControl(grade ? grade.score : '', [
+          const formControl = new FormControl(grade ? grade.score : 5, [
             Validators.required, Validators.min(this.activity.minScore), Validators.max(10)
           ]);
           this.scoreFormGroup.addControl(student.uid, formControl);
@@ -66,6 +66,25 @@ export class ModalActivityGradesComponent implements OnInit {
     } else {
       this.students = [...this.studentsService.students];
     }
+  }
+
+  updateErrorToolbar = (uid: string) => {
+    let errorText = '';
+    Object.values(this.scoreFormGroup.controls).some(formControl => {
+      if (formControl.errors) {
+        if (formControl.errors.required) {
+          errorText = 'Este campo es requerido';
+        } else if (formControl.errors.min) {
+          errorText = `El valor mínimo es ${this.activity.minScore}`;
+        } else if (formControl.errors.max) {
+          errorText = `El valor máximo es 10`;
+        }
+      } else {
+        errorText = '';
+      }
+      return errorText.length > 0;
+    });
+    this.toolbarErrorText = errorText;
   }
 
 }
