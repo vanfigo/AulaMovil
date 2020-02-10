@@ -5,6 +5,7 @@ export class Student {
   uid?: string;
   name: string;
   lastName: string;
+  listNumber?: number;
   creationDate: Date | Timestamp;
 
   constructor(name: string, lastName: string) {
