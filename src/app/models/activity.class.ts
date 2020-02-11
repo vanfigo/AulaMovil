@@ -11,7 +11,7 @@ export class Activity {
   dueDate: Date | Timestamp;
   creationDate: Date | Timestamp;
 
-  constructor(name: string, dueDate: Date, minScore: number) {
+  constructor(name: string, dueDate: Date | Timestamp, minScore: number) {
     this.name = name;
     this.dueDate = dueDate;
     this.minScore = minScore;

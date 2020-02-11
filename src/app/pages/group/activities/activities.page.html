@@ -2,8 +2,8 @@
   <ion-searchbar placeholder="Busca actividades" class="ion-padding"
                  cancelButtonIcon (ionChange)="filterActivities($event)"></ion-searchbar>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
-  <ion-card *ngIf="activities?.length === 0">
-    <ion-card-header color="medium">
+  <ion-card *ngIf="activities?.length === 0" color="medium">
+    <ion-card-header class="ion-text-center">
       <ion-card-title>No se encontraron actividades</ion-card-title>
     </ion-card-header>
   </ion-card>
@@ -19,8 +19,12 @@
       </ion-item-options>
       <ion-item detail button (click)="showSaveGrades(activity)">
         <ion-reorder slot="start"></ion-reorder>
+        <ion-chip slot="start">
+          <ion-icon name="book"></ion-icon>
+          <ion-label>{{activity.position}}</ion-label>
+        </ion-chip>
         <ion-label>
-          <span>Actividad {{activity.position}}: {{activity.name}}</span>
+          <span>{{activity.name ? activity.name : 'Sin nombre'}}</span>
           <p *ngIf="!activity.dueDate">Sin fecha de entrega</p>
           <p>{{activity.dueDate | date: 'mediumDate'}}</p>
         </ion-label>
@@ -28,17 +32,17 @@
       </ion-item>
     </ion-item-sliding>
   </ion-reorder-group>
-  <ion-fab horizontal="end" vertical="bottom">
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button color="aula-movil" (click)="showAddActivity()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-fab horizontal="start" vertical="bottom">
+  <ion-fab horizontal="start" vertical="bottom" slot="fixed">
     <ion-fab-button color="medium">
       <ion-icon name="settings"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button>
+      <ion-fab-button (click)="showOverviewActivities()">
         <ion-icon name="grid" color="aula-movil"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
