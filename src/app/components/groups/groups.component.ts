@@ -3,7 +3,6 @@ import {AlertController, ToastController} from '@ionic/angular';
 import {GroupsService} from '../../services/groups.service';
 import {SchoolYear} from '../../models/school-year.class';
 import {Group} from '../../models/group.class';
-import {SchoolYearsService} from '../../services/school-years.service';
 
 @Component({
   selector: 'app-groups',
@@ -18,25 +17,21 @@ export class GroupsComponent implements OnInit {
 
   constructor(private alertController: AlertController,
               private groupsService: GroupsService,
-              private schoolYearsService: SchoolYearsService,
               private toastController: ToastController) { }
 
   ngOnInit() {}
 
   selectedSchoolYear = (schoolYear: SchoolYear) => {
     this.schoolYear = schoolYear;
-    this.schoolYearsService.schoolYearUid = schoolYear.uid;
-    if (schoolYear) {
-      this.loading = true;
-      this.groupsService.findAllBySchoolYearUid()
-        .subscribe(groups => {
-          this.groups = groups;
-          this.loading = false;
-        });
-    } else {
-      this.groups = null;
-    }
+    this.loading = true;
+    this.groupsService.findAllBySchoolYearUid(schoolYear.uid)
+      .subscribe(groups => {
+        this.groups = groups;
+        this.loading = false;
+      });
   }
+
+  clearGroups = () => this.groups = [];
 
   showAddGroup = () => {
     this.alertController.create({
@@ -53,7 +48,7 @@ export class GroupsComponent implements OnInit {
       }, {
         text: 'Agregar',
         handler: (value) => {
-          const group: Group = new Group(value.groupName);
+          const group: Group = new Group(value.groupName, this.schoolYear.uid);
           this.groupsService.save(group)
             .then(() => {
               this.toastController.create({

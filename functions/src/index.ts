@@ -11,7 +11,7 @@ exports.createUser = functions.auth.user().onCreate((userRecord, context) => {
   });
 });
 
-exports.updateStudentsTotal = functions.firestore.document('users/{userUid}/schoolYears/{yearUid}/groups/{groupUid}/students/{studentUid}')
+exports.updateStudentsTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/students/{studentUid}')
   .onWrite((snapshot, context) => {
     const studentRef = snapshot.after.ref;
     const studentCollection = studentRef.parent;

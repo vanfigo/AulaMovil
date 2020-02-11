@@ -2,8 +2,9 @@ import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core'
 import {SchoolYear} from '../../models/school-year.class';
 import {IonInput, PickerController} from '@ionic/angular';
 import * as moment from 'moment';
-import {DocumentSnapshot} from '@angular/fire/firestore';
-import {SchoolYearsService} from '../../services/school-years.service';
+import {Plugins} from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-school-year',
@@ -15,11 +16,15 @@ export class SchoolYearComponent implements OnInit {
   @Output() schoolYear = new EventEmitter<SchoolYear>();
   @ViewChild(IonInput, {static: false}) schoolYearSelect: IonInput;
 
-  constructor(private schoolYearsService: SchoolYearsService,
-              private pickerController: PickerController) {
-  }
+  constructor(private pickerController: PickerController) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    Storage.get({ key: 'schoolYear' }).then(value => {
+      if (value.value !== null) {
+        this.selectSchoolYear(JSON.parse(value.value));
+      }
+    });
+  }
 
   showAddSchoolYear = async () => {
     const options = [];
@@ -49,20 +54,19 @@ export class SchoolYearComponent implements OnInit {
 
   createSchoolYear = (value) => {
     const schoolYear: SchoolYear = value.schoolYear.value;
-    this.schoolYearsService.findByUid(schoolYear.uid)
-      .subscribe((document: DocumentSnapshot<SchoolYear>) => {
-        if (!document.exists) {
-          this.schoolYearsService.save(schoolYear)
-            .then(() => this.schoolYearSelected(schoolYear));
-        } else {
-          this.schoolYearSelected(document.data());
-        }
-      });
+    Storage.set({
+      key: 'schoolYear',
+      value: JSON.stringify(schoolYear)
+    }).then(() => {
+      this.selectSchoolYear(schoolYear);
+    });
   }
 
-  schoolYearSelected = (schoolYear: SchoolYear) => {
-    this.schoolYearSelect.value = schoolYear.name;
+  selectSchoolYear = (schoolYear: SchoolYear) => {
     this.schoolYear.emit(schoolYear);
+    this.schoolYearSelect.value = schoolYear.name;
   }
+
+  clearShoolYear = () => this.schoolYearSelect.value = null;
 
 }

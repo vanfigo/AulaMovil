@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-button (click)="modalController.dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Reporte de Actividades</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-slides [options]="slideOpts" [pager]="true">
+  <ion-slide class="ion-padding-bottom">
+    <ion-content fullscreen class="ion-padding-bottom">
+      <app-activities-selection (selectedActivitiesEvent)="activitiesSelected($event)"></app-activities-selection>
+    </ion-content>
+  </ion-slide>
+  <ion-slide>
+    <ion-content fullscreen>
+      <app-student-selection (studentSelectedEvent)="studentSelected($event)"></app-student-selection>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="aula-movil">
+          <ion-icon name="document"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-content>
+  </ion-slide>
+  <ion-slide>
+    <ion-content fullscreen>
+      <ion-card>
+        <ion-card-header *ngIf="student">
+          <ion-card-title>{{student.name}} {{student.lastName}}</ion-card-title>
+          <ion-card-subtitle>
+            <ion-chip color="medium">
+              <ion-icon name="school"></ion-icon>
+              <ion-label>Promedio {{average | number: '1.0-2'}}</ion-label>
+            </ion-chip>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item *ngFor="let reportCard of reportCards">
+              <ion-chip slot="start">
+                <ion-icon name="book"></ion-icon>
+                <ion-label>{{reportCard.position}}</ion-label>
+              </ion-chip>
+              <ion-label>{{reportCard.name ? reportCard.name : 'Sin nombre'}}</ion-label>
+              <ion-badge slot="end">{{reportCard.score}}</ion-badge>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+  </ion-slide>
+</ion-slides>
+<ion-footer>
+  <ion-toolbar color="light">
+    <ion-title>{{getActivitiesText()}}</ion-title>
+  </ion-toolbar>
+</ion-footer>

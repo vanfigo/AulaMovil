@@ -3,8 +3,8 @@
                    cancelButtonIcon (ionChange)="filterStudents($event)"></ion-searchbar>
     <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
     <ion-list *ngIf="!loading">
-        <ion-card *ngIf="students.length === 0">
-            <ion-card-header color="medium">
+        <ion-card *ngIf="students.length === 0" color="medium">
+            <ion-card-header class="ion-text-center">
                 <ion-card-title>No se encontraron estudiantes</ion-card-title>
             </ion-card-header>
         </ion-card>

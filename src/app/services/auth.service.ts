@@ -3,7 +3,10 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {auth, User} from 'firebase';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs';
+import {Plugins} from '@capacitor/core';
 import IdTokenResult = firebase.auth.IdTokenResult;
+
+const { Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +41,8 @@ export class AuthService {
   googleSignIn = () => this.afAuth.auth.signInWithPopup(
     new auth.GoogleAuthProvider().setCustomParameters({ prompt: 'select_account' }))
 
-  signOut = () => this.afAuth.auth.signOut()
+  signOut = async () => {
+    await Storage.clear();
+    await this.afAuth.auth.signOut();
+  }
 }

@@ -3,10 +3,11 @@ import {ActivitiesService} from '../../../services/activities.service';
 import {GroupsService} from '../../../services/groups.service';
 import {Activity} from '../../../models/activity.class';
 import {AlertController, ModalController, ToastController} from '@ionic/angular';
-import {ModalActivitiesComponent} from '../../../components/modal/modal-activities/modal-activities.component';
-import {ModalActivityGradesComponent} from '../../../components/modal/modal-activity-grades/modal-activity-grades.component';
+import {ModalActivitiesComponent} from '../../../components/activities/modal-activities/modal-activities.component';
+import {ModalActivityGradesComponent} from '../../../components/activities/modal-activity-grades/modal-activity-grades.component';
 import {DeactivatableComponent} from '../../../interfaces/deactivable-component.interface';
 import {Observable} from 'rxjs';
+import {ModalActivitiesOverviewComponent} from '../../../components/activities/modal-activities-overview/modal-activities-overview.component';
 
 @Component({
   selector: 'app-activities',
@@ -78,8 +79,12 @@ export class ActivitiesPage implements DeactivatableComponent {
     this.disableReorder = true;
     const filterValue: string = event.detail.value.toLowerCase();
     if (filterValue.length > 0) {
-      this.activities = this.filteredActivities.filter(activity => filterValue.split(' ').every(filter =>
+      if (isNaN(Number(filterValue))) {
+        this.activities = this.filteredActivities.filter(activity => filterValue.split(' ').every(filter =>
           activity.name.toLowerCase().indexOf(filter) >= 0));
+      } else {
+        this.activities = this.activities.filter(activity => activity.position === Number(filterValue));
+      }
     } else {
       this.activities = [...this.filteredActivities];
     }
@@ -98,5 +103,9 @@ export class ActivitiesPage implements DeactivatableComponent {
       component: ModalActivityGradesComponent,
       componentProps: { activity }
     }).then(modal => modal.present())
+
+  showOverviewActivities = () => this.modalController.create({
+    component: ModalActivitiesOverviewComponent
+  }).then(modal => modal.present())
 
 }

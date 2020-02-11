@@ -3,7 +3,6 @@ import {ModalController, ToastController} from '@ionic/angular';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Activity} from '../../../models/activity.class';
 import {ActivitiesService} from '../../../services/activities.service';
-import {GroupsService} from '../../../services/groups.service';
 
 @Component({
   selector: 'app-modal-activities',
@@ -19,13 +18,12 @@ export class ModalActivitiesComponent implements OnInit {
 
   constructor(public modalController: ModalController,
               private activitiesService: ActivitiesService,
-              private toastController: ToastController,
-              private groupsService: GroupsService) { }
+              private toastController: ToastController) { }
 
   ngOnInit() {
     this.formActivity = new FormGroup({
       name: new FormControl(this.activity ? this.activity.name : ''),
-      dueDate: new FormControl(this.activity ? this.activity.dueDate : ''),
+      dueDate: new FormControl(this.activity && this.activity.dueDate ? this.activity.dueDate.toLocaleString() : ''),
       minScore: new FormControl(this.activity ? this.activity.minScore : 5, [
         Validators.required,
         Validators.min(0),
@@ -47,13 +45,15 @@ export class ModalActivitiesComponent implements OnInit {
 
   saveActivity = () => {
     const {name, dueDate, minScore} = this.formActivity.value;
+    const truncatedDate = dueDate ?
+      new Date(new Date(dueDate).getFullYear(), new Date(dueDate).getMonth(), new Date(dueDate).getDate()) : null;
     if (this.activity) {
       this.activity.name = name;
-      this.activity.dueDate = dueDate;
+      this.activity.dueDate = truncatedDate;
       this.activity.minScore = minScore;
       this.activitiesService.update(this.activity).then(() => this.presentToast(this.activity));
     } else {
-      const activity: Activity = new Activity(name, dueDate, minScore);
+      const activity: Activity = new Activity(name, truncatedDate, minScore);
       this.activitiesService.save(activity).then(() => this.presentToast(activity));
     }
   }

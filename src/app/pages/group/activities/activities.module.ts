@@ -7,7 +7,7 @@ import {IonicModule} from '@ionic/angular';
 import {ActivitiesPageRoutingModule} from './activities-routing.module';
 
 import {ActivitiesPage} from './activities.page';
-import {ModalModule} from '../../../components/modal/modal.module';
+import {ActivitiesModule} from '../../../components/activities/activities.module';
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import {ModalModule} from '../../../components/modal/modal.module';
     FormsModule,
     IonicModule,
     ActivitiesPageRoutingModule,
-    ModalModule
+    ActivitiesModule
   ],
   declarations: [ActivitiesPage]
 })
