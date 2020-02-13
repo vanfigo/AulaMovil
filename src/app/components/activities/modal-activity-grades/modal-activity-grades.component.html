@@ -23,27 +23,15 @@
     </ion-card-header>
   </ion-card>
   <ion-list [formGroup]="scoreFormGroup">
-    <ion-item *ngFor="let student of students">
+    <ion-list-header>Actividad {{activity.position}}: {{activity.name ? activity.name : 'Sin nombre'}}</ion-list-header>
+    <ion-item *ngFor="let student of students" button (click)="showScorePicker(student)">
       <ion-chip slot="start">
         <ion-icon name="person"></ion-icon>
         <ion-label>{{student?.listNumber}}</ion-label>
       </ion-chip>
       <ion-label>{{student.name}} {{student.lastName}}</ion-label>
-      <ion-item slot="end" style="display: flex; flex-direction: column">
-        <ion-input [name]="student.uid" type="number" (ionChange)="updateErrorToolbar(student.uid)"
-                   class="ion-text-end" [min]="activity.minScore" max="10" debounce="250"
-                   [formControlName]="student.uid"></ion-input>
-      </ion-item>
+      <ion-input slot="end" readonly
+                 [name]="student.uid" [formControlName]="student.uid" class="ion-text-center"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>
-<ion-footer>
-  <ion-toolbar *ngIf="toolbarErrorText?.length > 0">
-    <ion-buttons slot="start">
-      <ion-icon name="close-circle" color="danger" slot="icon-only"></ion-icon>
-    </ion-buttons>
-    <ion-title size="small">
-      <ion-label color="danger">{{toolbarErrorText}}</ion-label>
-    </ion-title>
-  </ion-toolbar>
-</ion-footer>
