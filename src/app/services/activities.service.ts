@@ -13,6 +13,8 @@ import Timestamp = firebase.firestore.Timestamp;
 export class ActivitiesService {
 
   collectionName = 'activities';
+  minScore = 5;
+  maxScore = 10;
 
   constructor(private db: AngularFirestore,
               private authService: AuthService,

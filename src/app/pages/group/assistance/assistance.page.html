@@ -27,9 +27,10 @@
         <ion-checkbox slot="end" color="aula-movil" [name]="student.uid"
                       (ionChange)="selectStudent($event, student)"></ion-checkbox>
       </ion-item>
+      <ion-item lines="none"></ion-item>
     </ng-template>
   </ion-list>
-  <ion-fab horizontal="end" vertical="bottom">
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button color="aula-movil" (click)="saveAssistance()"
                     [disabled]="!datetime.value">
       <ion-icon name="save"></ion-icon>

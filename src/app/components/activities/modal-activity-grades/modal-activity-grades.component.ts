@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ModalController, ToastController} from '@ionic/angular';
+import {FormControl, FormGroup} from '@angular/forms';
+import {ModalController, PickerController, ToastController} from '@ionic/angular';
 import {Activity} from '../../../models/activity.class';
 import {Student} from '../../../models/student.class';
 import {StudentsService} from '../../../services/students.service';
@@ -23,7 +23,8 @@ export class ModalActivityGradesComponent implements OnInit {
   constructor(public modalController: ModalController,
               private studentsService: StudentsService,
               private activitiesService: ActivitiesService,
-              private toastController: ToastController) { }
+              private toastController: ToastController,
+              private pickerController: PickerController) { }
 
   ngOnInit() {
     this.scoreFormGroup = new FormGroup({});
@@ -33,9 +34,7 @@ export class ModalActivityGradesComponent implements OnInit {
         this.students = students;
         this.students.forEach(student => {
           const grade: Grade = this.activity.grades.find(storedGrade => storedGrade.studentUid === student.uid);
-          const formControl = new FormControl(grade ? grade.score : 5, [
-            Validators.required, Validators.min(this.activity.minScore), Validators.max(10)
-          ]);
+          const formControl = new FormControl(grade ? grade.score : this.activitiesService.minScore);
           this.scoreFormGroup.addControl(student.uid, formControl);
         });
         this.loading = false;
@@ -49,8 +48,8 @@ export class ModalActivityGradesComponent implements OnInit {
     this.activity.grades = grades;
     this.activitiesService.update(this.activity)
       .then(() => this.toastController.create({
-        message: `Las calificaciones para la <strong>Actividad ${this.activity.position}: ${this.activity.name}</strong>` +
-          ' han sido actualizadas',
+        message: `Las calificaciones para la <strong>Actividad ${this.activity.position}: ` +
+          `${this.activity.name ? this.activity.name : 'Sin nombre'}</strong> han sido actualizadas`,
         duration: 3000
       }).then(toast => {
         toast.present();
@@ -68,23 +67,31 @@ export class ModalActivityGradesComponent implements OnInit {
     }
   }
 
-  updateErrorToolbar = (uid: string) => {
-    let errorText = '';
-    Object.values(this.scoreFormGroup.controls).some(formControl => {
-      if (formControl.errors) {
-        if (formControl.errors.required) {
-          errorText = 'Este campo es requerido';
-        } else if (formControl.errors.min) {
-          errorText = `El valor mínimo es ${this.activity.minScore}`;
-        } else if (formControl.errors.max) {
-          errorText = `El valor máximo es 10`;
+  showScorePicker = async (student: Student) => {
+    const options = [];
+    for (let score = this.activitiesService.minScore; score <= this.activitiesService.maxScore; score++) {
+      options.push({
+        value: score,
+        text: score
+      });
+    }
+    const picker = await this.pickerController.create({
+      columns: [{
+        name: 'score',
+        options
+      }],
+      buttons: [{
+        text: 'Cancelar',
+        role: 'cancel'
+      }, {
+        text: 'Seleccionar',
+        handler: (value) => {
+          const score: number = value.score.value;
+          this.scoreFormGroup.get(student.uid).setValue(score);
         }
-      } else {
-        errorText = '';
-      }
-      return errorText.length > 0;
+      }]
     });
-    this.toolbarErrorText = errorText;
+    await picker.present();
   }
 
 }
