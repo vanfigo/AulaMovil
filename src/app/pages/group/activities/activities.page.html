@@ -39,16 +39,16 @@
   </ion-fab>
   <ion-fab horizontal="start" vertical="bottom" slot="fixed">
     <ion-fab-button color="medium">
-      <ion-icon name="settings"></ion-icon>
+      <ion-icon name="settings-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
       <ion-fab-button (click)="showOverviewActivities()">
-        <ion-icon name="grid" color="aula-movil"></ion-icon>
+        <ion-icon name="school-outline" color="aula-movil"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="end">
       <ion-fab-button (click)="disableReorder = !disableReorder" *ngIf="activities?.length > 1">
-        <ion-icon name="reorder" color="aula-movil"></ion-icon>
+        <ion-icon name="reorder-two-outline" color="aula-movil"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
