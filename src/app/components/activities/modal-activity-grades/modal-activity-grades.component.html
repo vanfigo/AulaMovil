@@ -24,7 +24,7 @@
   </ion-card>
   <ion-list [formGroup]="scoreFormGroup">
     <ion-list-header>Actividad {{activity.position}}: {{activity.name ? activity.name : 'Sin nombre'}}</ion-list-header>
-    <ion-item *ngFor="let student of students" button (click)="showScorePicker(student)">
+    <ion-item *ngFor="let student of students" button (click)="showScorePicker(student)" detail>
       <ion-chip slot="start">
         <ion-icon name="person"></ion-icon>
         <ion-label>{{student?.listNumber}}</ion-label>

@@ -25,12 +25,14 @@ export class HomePage implements OnInit {
     this.groupsComponent.selectedSchoolYear(schoolYear);
   }
 
-  async ionViewWillEnter() {
-    const schoolYear = await Storage.get({key: 'schoolYear'});
-    if (!schoolYear.value) {
-      this.groupsComponent.clearGroups();
-      this.schoolYearComponent.clearShoolYear();
-    }
+  ionViewWillEnter() {
+    Storage.get({key: 'schoolYear'})
+      .then(value => {
+        if (value.value === null) {
+          this.groupsComponent.clearGroups();
+          this.schoolYearComponent.clearSchoolYear();
+        }
+      });
   }
 
 }

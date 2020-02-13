@@ -67,6 +67,6 @@ export class SchoolYearComponent implements OnInit {
     this.schoolYearSelect.value = schoolYear.name;
   }
 
-  clearShoolYear = () => this.schoolYearSelect.value = null;
+  clearSchoolYear = () => this.schoolYearSelect.value = null;
 
 }
