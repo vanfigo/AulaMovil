@@ -77,10 +77,15 @@ export class ActivitiesService {
   changePosition = (fromUid: string, from: number, toUid: string, to: number) => {
     const batch = this.db.firestore.batch();
     const fromDocument = this.getCollectionActivities().doc(fromUid).ref;
-    const toDocument = this.getCollectionActivities().doc(toUid).ref;
-    batch.update(fromDocument, {position: to});
-    batch.update(toDocument, {position: from});
-    return batch.commit();
+    const increment = from > to ? 1 : -1;
+    return this.getDocumentGroup().collection(this.collectionName, ref => ref
+      .where('position', '>=', to).where('position', '<', from))
+      .get().toPromise().then((snapshot: QuerySnapshot<Activity>) => {
+      snapshot.docs.forEach((storedActivity: QueryDocumentSnapshot<Activity>) =>
+        batch.update(storedActivity.ref, {position: storedActivity.data().position + increment}));
+      batch.update(fromDocument, {position: to});
+      return batch.commit();
+    });
   }
 
 }
