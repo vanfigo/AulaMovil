@@ -31,7 +31,10 @@ export class GroupsComponent implements OnInit {
       });
   }
 
-  clearGroups = () => this.groups = [];
+  clearGroups = () => {
+    this.groups = [];
+    this.schoolYear = null;
+  }
 
   showAddGroup = () => {
     this.alertController.create({
