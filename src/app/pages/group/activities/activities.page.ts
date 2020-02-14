@@ -19,7 +19,6 @@ export class ActivitiesPage implements DeactivatableComponent {
   loading = true;
   disableReorder = true;
   activities: Activity[];
-  filteredActivities: Activity[];
 
   constructor(private activitiesService: ActivitiesService,
               private groupsService: GroupsService,
@@ -28,7 +27,7 @@ export class ActivitiesPage implements DeactivatableComponent {
               private toastController: ToastController) {
     activitiesService.findAllByGroupUid().subscribe(activities => {
         this.activities = activities;
-        this.filteredActivities = activities;
+        this.activitiesService.activities = activities;
         this.loading = false;
       });
   }
@@ -79,14 +78,9 @@ export class ActivitiesPage implements DeactivatableComponent {
     this.disableReorder = true;
     const filterValue: string = event.detail.value.toLowerCase();
     if (filterValue.length > 0) {
-      if (isNaN(Number(filterValue))) {
-        this.activities = this.filteredActivities.filter(activity => filterValue.split(' ').every(filter =>
-          activity.name.toLowerCase().indexOf(filter) >= 0));
+        this.activities = this.activitiesService.filterActivities(filterValue);
       } else {
-        this.activities = this.activities.filter(activity => activity.position === Number(filterValue));
-      }
-    } else {
-      this.activities = [...this.filteredActivities];
+      this.activities = [...this.activitiesService.activities];
     }
   }
 
