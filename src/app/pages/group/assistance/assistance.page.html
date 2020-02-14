@@ -9,11 +9,8 @@
                  (ionChange)="filterStudents($event)" *ngIf="datetime.value"></ion-searchbar>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
   <ion-list *ngIf="!loading && datetime.value">
-    <ion-card *ngIf="students.length === 0; else studentsInGroup" color="medium">
-      <ion-card-header class="ion-text-center">
-        <ion-card-title>No se encontraron estudiantes</ion-card-title>
-      </ion-card-header>
-    </ion-card>
+    <app-empty-list *ngIf="students.length === 0; else studentsInGroup"
+                    emptyText="No se encontraron alumnos"></app-empty-list>
     <ng-template #studentsInGroup>
       <ion-item>
         <ion-note slot="end" class="ion-text-end">Falta</ion-note>

@@ -2,12 +2,8 @@
   <ion-searchbar placeholder="Busca actividades" class="ion-padding"
                  cancelButtonIcon (ionChange)="filterActivities($event)"></ion-searchbar>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
-  <ion-list>
-    <ion-card *ngIf="activities?.length === 0" color="medium">
-      <ion-card-header class="ion-text-center">
-        <ion-card-title>No se encontraron actividades</ion-card-title>
-      </ion-card-header>
-    </ion-card>
+  <ion-list *ngIf="!loading">
+    <app-empty-list *ngIf="activities.length === 0" emptyText="No se encontraron actividades" [displayBadge]="true"></app-empty-list>
     <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="disableReorder">
       <ion-item-sliding *ngFor="let activity of activities">
         <ion-item-options side="start">

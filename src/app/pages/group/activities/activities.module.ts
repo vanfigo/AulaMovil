@@ -8,6 +8,7 @@ import {ActivitiesPageRoutingModule} from './activities-routing.module';
 
 import {ActivitiesPage} from './activities.page';
 import {ActivitiesModule} from '../../../components/activities/activities.module';
+import {SharedModule} from '../../../components/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {ActivitiesModule} from '../../../components/activities/activities.module
     FormsModule,
     IonicModule,
     ActivitiesPageRoutingModule,
-    ActivitiesModule
+    ActivitiesModule,
+    SharedModule
   ],
   declarations: [ActivitiesPage]
 })

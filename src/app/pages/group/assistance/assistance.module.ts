@@ -7,13 +7,15 @@ import {IonicModule} from '@ionic/angular';
 import {AssistancePageRoutingModule} from './assistance-routing.module';
 
 import {AssistancePage} from './assistance.page';
+import {SharedModule} from '../../../components/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AssistancePageRoutingModule
+    AssistancePageRoutingModule,
+    SharedModule
   ],
   declarations: [AssistancePage]
 })
