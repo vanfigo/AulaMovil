@@ -16,10 +16,10 @@ import {Subscription} from 'rxjs';
 })
 export class AssistancePage implements OnInit {
 
-  loading = true;
+  loading = false;
   students: Student[];
   selectedStudents: Student[] = [];
-  assistanceDate: Date;
+  assistance: Assistance;
   studentCheckBoxSub = new Subscription();
   @ViewChildren(IonCheckbox) studentCheckbox: QueryList<IonCheckbox>;
   monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -28,13 +28,7 @@ export class AssistancePage implements OnInit {
   constructor(private studentsService: StudentsService,
               private groupsService: GroupsService,
               private assistanceService: AssistancesService,
-              private toastController: ToastController) {
-    studentsService.findAllByGroupUid().subscribe(students => {
-      this.studentsService.students = students;
-      this.students = students;
-      this.loading = false;
-    });
-  }
+              private toastController: ToastController) { }
 
   ngOnInit() { }
 
@@ -62,27 +56,37 @@ export class AssistancePage implements OnInit {
     }
   }
 
-  searchAssistance = (event: IonDatetime) => {
-    this.assistanceDate = new Date(event.value);
-    const assistance = new Assistance(this.assistanceDate);
-    this.assistanceService.findByUid(assistance.uid)
+  validateAssistance = (event: IonDatetime) => {
+    this.loading = true;
+    this.assistance = new Assistance(new Date(event.value));
+    if (!this.students) {
+      this.studentsService.findAllByGroupUid().subscribe(students => {
+        this.studentsService.students = students;
+        this.students = students;
+        this.searchAssistance();
+      });
+    } else {
+      this.searchAssistance();
+    }
+  }
+
+  searchAssistance = () => {
+    this.assistanceService.findByUid(this.assistance.uid)
       .subscribe((storedAssistance: DocumentSnapshot<Assistance>) => {
-        this.studentCheckbox.forEach(checkBox => checkBox.checked = false);
+        this.selectedStudents = [];
         if (storedAssistance.exists) {
-          storedAssistance.data().students.forEach((student: Student) => {
-            this.studentCheckbox.find((checkBox: IonCheckbox) => checkBox.name === student.uid).checked = true;
-          });
+          this.selectedStudents = storedAssistance.data().students;
         }
+        this.loading = false;
       });
   }
 
   saveAssistance = () => {
-    const assistance = new Assistance(this.assistanceDate);
-    assistance.students = this.selectedStudents;
-    this.assistanceService.save(assistance)
+    this.assistance.students = this.selectedStudents;
+    this.assistanceService.save(this.assistance)
       .then(() => {
         this.toastController.create({
-          message: `La asistencia para el día ${moment(assistance.date).format('DD/MMMM/YYYY')} ha sido guardada exitosamente`,
+          message: `La asistencia para el día ${moment(this.assistance.date).format('DD/MMMM/YYYY')} ha sido guardada exitosamente`,
           duration: 3000
         }).then(toast => toast.present());
       });

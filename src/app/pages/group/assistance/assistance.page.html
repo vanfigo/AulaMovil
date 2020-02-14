@@ -3,17 +3,14 @@
     <ion-label>Asistencia</ion-label>
     <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha de asistencia"
                   cancelText="Cancelar" doneText="Seleccionar" [monthNames]="monthNames"
-                  #datetime (ionChange)="searchAssistance(datetime)"></ion-datetime>
+                  #datetime (ionChange)="validateAssistance(datetime)"></ion-datetime>
   </ion-item>
   <ion-searchbar placeholder="Busca alumnos" class="ion-padding" cancelButtonIcon
-                 (ionChange)="filterStudents($event)"></ion-searchbar>
+                 (ionChange)="filterStudents($event)" *ngIf="datetime.value"></ion-searchbar>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
-  <ion-list *ngIf="!loading">
-    <ion-card *ngIf="students.length === 0; else studentsInGroup" color="medium">
-      <ion-card-header class="ion-text-center">
-        <ion-card-title>No se encontraron estudiantes</ion-card-title>
-      </ion-card-header>
-    </ion-card>
+  <ion-list *ngIf="!loading && datetime.value">
+    <app-empty-list *ngIf="students.length === 0; else studentsInGroup"
+                    emptyText="No se encontraron alumnos"></app-empty-list>
     <ng-template #studentsInGroup>
       <ion-item>
         <ion-note slot="end" class="ion-text-end">Falta</ion-note>

@@ -1,0 +1,27 @@
+<ion-list>
+  <ion-list-header lines="full" mode="ios">
+    <ion-label>{{emptyText}}</ion-label>
+  </ion-list-header>
+  <ion-item detail>
+    <ion-chip slot="start">
+      <ion-skeleton-text style="width: 20px"></ion-skeleton-text>
+    </ion-chip>
+    <ion-label>
+      <ion-skeleton-text></ion-skeleton-text>
+    </ion-label>
+    <ion-badge slot="end" *ngIf="displayBadge">
+      <ion-skeleton-text style="width: 30px;"></ion-skeleton-text>
+    </ion-badge>
+  </ion-item>
+  <ion-item detail>
+    <ion-chip slot="start">
+      <ion-skeleton-text style="width: 20px"></ion-skeleton-text>
+    </ion-chip>
+    <ion-label>
+      <ion-skeleton-text></ion-skeleton-text>
+    </ion-label>
+    <ion-badge slot="end" *ngIf="displayBadge">
+      <ion-skeleton-text style="width: 30px;"></ion-skeleton-text>
+    </ion-badge>
+  </ion-item>
+</ion-list>

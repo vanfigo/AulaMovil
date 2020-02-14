@@ -6,13 +6,15 @@ import {IonicModule} from '@ionic/angular';
 
 import {StudentsPage} from './students.page';
 import {StudentsPageRoutingModule} from './students-routing.module';
+import {SharedModule} from '../../../components/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    StudentsPageRoutingModule
+    StudentsPageRoutingModule,
+    SharedModule
   ],
   declarations: [StudentsPage]
 })

@@ -2,11 +2,7 @@
                cancelButtonIcon (ionChange)="filterStudents($event)"></ion-searchbar>
 <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
 <ion-list *ngIf="!loading">
-  <ion-card *ngIf="students.length === 0" color="medium">
-    <ion-card-header class="ion-text-center">
-      <ion-card-title>No se encontraron estudiantes</ion-card-title>
-    </ion-card-header>
-  </ion-card>
+  <app-empty-list *ngIf="students.length === 0" emptyText="No se encontraron alumnos"></app-empty-list>
   <ion-item detail button *ngFor="let student of students" (click)="studentSelectedEvent.emit(student)">
     <ion-chip slot="start">
       <ion-icon name="person"></ion-icon>
