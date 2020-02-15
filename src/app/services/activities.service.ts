@@ -5,6 +5,7 @@ import {GroupsService} from './groups.service';
 import {flatMap, map} from 'rxjs/operators';
 import {Activity} from '../models/activity.class';
 import * as firebase from 'firebase';
+import {PickerColumnOption} from '@ionic/core/dist/types/components/picker/picker-interface';
 import Timestamp = firebase.firestore.Timestamp;
 
 @Injectable({
@@ -16,10 +17,18 @@ export class ActivitiesService {
   minScore = 5;
   maxScore = 10;
   activities: Activity[];
+  options: PickerColumnOption[] = [];
 
   constructor(private db: AngularFirestore,
               private authService: AuthService,
-              private groupsService: GroupsService) { }
+              private groupsService: GroupsService) {
+    for (let score = this.minScore; score <= this.maxScore; score++) {
+      this.options.push({
+        value: score,
+        text: score.toString()
+      });
+    }
+  }
 
   getDocumentGroup = () => this.db.collection('users').doc(this.authService.user.uid)
       .collection('groups').doc(this.groupsService.group.uid)

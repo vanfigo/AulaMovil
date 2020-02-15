@@ -98,7 +98,6 @@ export class ActivitiesSelectionComponent implements AfterViewInit, OnDestroy {
   updateSelectedActivities = () => {
     this.selectedActivities = this.selectedActivities
       .filter(selectedActivity => this.activities.find(activity => activity.uid === selectedActivity.uid));
-    console.log(this.selectedActivities);
     this.selectedActivitiesEvent.emit(this.selectedActivities);
   }
 

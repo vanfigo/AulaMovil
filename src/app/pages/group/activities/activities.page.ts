@@ -4,10 +4,10 @@ import {GroupsService} from '../../../services/groups.service';
 import {Activity} from '../../../models/activity.class';
 import {AlertController, ModalController, ToastController} from '@ionic/angular';
 import {ModalActivitiesComponent} from '../../../components/activities/modal-activities/modal-activities.component';
-import {ModalActivityGradesComponent} from '../../../components/activities/modal-activity-grades/modal-activity-grades.component';
+import {ModalGradesComponent} from '../../../components/activities/modal-grades/modal-grades.component';
 import {DeactivatableComponent} from '../../../interfaces/deactivable-component.interface';
 import {Observable} from 'rxjs';
-import {ModalActivitiesOverviewComponent} from '../../../components/activities/modal-activities-overview/modal-activities-overview.component';
+import {ModalActivitiesOverviewComponent} from '../../../components/activities/modal-overview/modal-activities-overview.component';
 
 @Component({
   selector: 'app-activities',
@@ -94,7 +94,7 @@ export class ActivitiesPage implements DeactivatableComponent {
   }
 
   showSaveGrades = (activity: Activity) => this.modalController.create({
-      component: ModalActivityGradesComponent,
+      component: ModalGradesComponent,
       componentProps: { activity }
     }).then(modal => modal.present())
 
