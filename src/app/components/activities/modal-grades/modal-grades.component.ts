@@ -9,10 +9,10 @@ import {ActivitiesService} from '../../../services/activities.service';
 
 @Component({
   selector: 'app-modal-activity-grades',
-  templateUrl: './modal-activity-grades.component.html',
-  styleUrls: ['./modal-activity-grades.component.scss'],
+  templateUrl: './modal-grades.component.html',
+  styleUrls: ['./modal-grades.component.scss'],
 })
-export class ModalActivityGradesComponent implements OnInit {
+export class ModalGradesComponent implements OnInit {
 
   loading = true;
   students: Student[];
@@ -68,17 +68,10 @@ export class ModalActivityGradesComponent implements OnInit {
   }
 
   showScorePicker = async (student: Student) => {
-    const options = [];
-    for (let score = this.activitiesService.minScore; score <= this.activitiesService.maxScore; score++) {
-      options.push({
-        value: score,
-        text: score
-      });
-    }
     const picker = await this.pickerController.create({
       columns: [{
         name: 'score',
-        options
+        options: this.activitiesService.options
       }],
       buttons: [{
         text: 'Cancelar',

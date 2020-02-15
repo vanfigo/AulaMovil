@@ -5,22 +5,22 @@ import {ModalActivitiesOverviewComponent} from './modal-activities-overview.comp
 import {ActivitiesSelectionComponent} from './activities-selection/activities-selection.component';
 import {StudentSelectionComponent} from './student-selection/student-selection.component';
 import {SharedModule} from '../../shared/shared.module';
+import {ReportCardComponent} from './report-card/report-card.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ModalActivitiesOverviewComponent,
     ActivitiesSelectionComponent,
-    StudentSelectionComponent
-  ],
-  exports: [
-    ActivitiesSelectionComponent,
-    StudentSelectionComponent
+    StudentSelectionComponent,
+    ReportCardComponent
   ],
   entryComponents: [
     ModalActivitiesOverviewComponent

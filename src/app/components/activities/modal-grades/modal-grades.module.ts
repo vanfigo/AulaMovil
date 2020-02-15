@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ModalActivityGradesComponent} from './modal-activity-grades.component';
+import {ModalGradesComponent} from './modal-grades.component';
 import {IonicModule} from '@ionic/angular';
 import {ReactiveFormsModule} from '@angular/forms';
 
@@ -12,10 +12,10 @@ import {ReactiveFormsModule} from '@angular/forms';
     ReactiveFormsModule
   ],
   declarations: [
-    ModalActivityGradesComponent
+    ModalGradesComponent
   ],
   entryComponents: [
-    ModalActivityGradesComponent
+    ModalGradesComponent
   ]
 })
-export class ModalActivityGradesModule { }
+export class ModalGradesModule { }
