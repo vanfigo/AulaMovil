@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Seleccion de actividades</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/home']">
+        <ion-icon slot="icon-only" name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header lines="none" mode="ios">
+      <ion-label>{{student.name}} {{student.lastName}}</ion-label>
+    </ion-list-header>
+    <ion-item lines="none">
+      <ion-chip color="medium">
+        <ion-icon name="school"></ion-icon>
+        <ion-label>Promedio {{average | number: '1.0-2'}}</ion-label>
+      </ion-chip>
+    </ion-item>
+  </ion-list>
+  <ion-list [formGroup]="reportCardGroup">
+    <ion-item *ngFor="let reportCard of reportCards" button (click)="showScorePicker(reportCard)" detail>
+      <ion-chip slot="start">
+        <ion-icon name="book"></ion-icon>
+        <ion-label>{{reportCard.position}}</ion-label>
+      </ion-chip>
+      <ion-label>{{reportCard.name ? reportCard.name : 'Sin nombre'}}</ion-label>
+      <ion-input slot="end" readonly
+                 [name]="reportCard.activityUid" [formControlName]="reportCard.activityUid" class="ion-text-center"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
