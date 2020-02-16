@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Seleccion de actividades</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showSelectStudents()">
+        <ion-icon slot="icon-only" name="person"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header mode="ios">Filtros de actividades</ion-list-header>
+    <ion-item detail>
+      <ion-label>Fecha inicial</ion-label>
+      <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha inicial"
+                    cancelText="Cancelar" doneText="Seleccionar" [monthNames]="monthNames"
+                    #initialDate (ionChange)="setInitialDate($event)"></ion-datetime>
+    </ion-item>
+    <ion-item detail>
+      <ion-label>Fecha final</ion-label>
+      <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha final" [disabled]="!initialDate.value"
+                    cancelText="Cancelar" doneText="Seleccionar" [monthNames]="monthNames" [min]="initialDate.value"
+                    #finalDate (ionChange)="setFinalDate($event)"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Actividades sin fecha</ion-label>
+      <ion-checkbox slot="end" (ionChange)="findActivities()" #noDueDateCheckbox></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <ion-searchbar placeholder="Busca actividades" class="ion-padding"
+                 cancelButtonIcon (ionChange)="filterActivities($event)"></ion-searchbar>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <ion-list *ngIf="!loading">
+    <app-empty-list *ngIf="activities?.length === 0" emptyText="No se encontraron actividades" [displayBadge]="true"></app-empty-list>
+    <ion-item *ngFor="let activity of activities">
+      <ion-chip slot="start">
+        <ion-icon name="book"></ion-icon>
+        <ion-label>{{activity.position}}</ion-label>
+      </ion-chip>
+      <ion-label>
+        <span>{{activity.name ? activity.name : 'Sin nombre'}}</span>
+        <p *ngIf="!activity.dueDate">Sin fecha de entrega</p>
+        <p>{{activity.dueDate?.toDate() | date: 'mediumDate'}}</p>
+      </ion-label>
+      <ion-badge color="aula-movil" slot="end">Mínimo: {{activity.minScore}}</ion-badge>
+      <ion-checkbox slot="end" (ionChange)="selectActivity($event, activity)" [name]="activity.uid"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>
