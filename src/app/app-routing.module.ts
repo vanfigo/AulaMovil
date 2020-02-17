@@ -10,8 +10,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/assistance/assistance.module').then(m => m.AssistancePageModule) },
   { path: 'group/:groupUid/activities',
     loadChildren: () => import('./pages/activities/activities.module').then(m => m.ActivitiesPageModule) },
-  { path: 'group/:groupUid/activitiesReport',
-    loadChildren: () => import('./pages/activitiesReport/activities-report.module').then(m => m.ActivitiesReportModule) },
+  { path: 'group/:groupUid/activities-report',
+    loadChildren: () => import('./pages/activities-report/activities-report.module').then(m => m.ActivitiesReportModule) },
+  { path: 'group/:groupUid/assistance-report',
+    loadChildren: () => import('./pages/assistance-report/assistance-report.module').then(m => m.AssistanceReportModule) },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 

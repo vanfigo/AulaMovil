@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Seleccion de alumno</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+<ion-list>
+  <ion-list-header mode="ios">Filtros de asistencia</ion-list-header>
+  <ion-item detail>
+    <ion-label>Fecha inicial</ion-label>
+    <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha inicial"
+                  cancelText="Cancelar" doneText="Seleccionar" [monthNames]="monthNames"
+                  #initialDate (ionChange)="setInitialDate($event)"></ion-datetime>
+  </ion-item>
+  <ion-item detail>
+    <ion-label>Fecha final</ion-label>
+    <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha final" [disabled]="!initialDate.value"
+                  cancelText="Cancelar" doneText="Seleccionar" [monthNames]="monthNames" [min]="initialDate.value"
+                  #finalDate (ionChange)="setFinalDate($event)"></ion-datetime>
+  </ion-item>
+  <ion-searchbar placeholder="Busca alumnos" class="ion-padding"
+                 cancelButtonIcon (ionChange)="filterStudents($event)"></ion-searchbar>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <ion-list *ngIf="!loading">
+    <app-empty-list *ngIf="students.length === 0" emptyText="No se encontraron alumnos"></app-empty-list>
+    <ion-item detail button *ngFor="let student of students" (click)="showAssistanceCard(student)">
+      <ion-chip slot="start">
+        <ion-icon name="person"></ion-icon>
+        <ion-label>{{student?.listNumber}}</ion-label>
+      </ion-chip>
+      <ion-label>{{student.name}} {{student.lastName}}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-list>
+</ion-content>

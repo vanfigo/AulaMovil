@@ -45,7 +45,7 @@ export class ActivitiesSelectionPage implements OnInit {
     });
   }
 
-  ionViewDidChange() {
+  ionViewWillEnter() {
     this.activityCheckBoxSub = this.activitiesCheckbox.changes.subscribe(this.updateSelectedCheckBox);
   }
 
