@@ -106,6 +106,56 @@ export class HomePage {
     }).then(alert => alert.present());
   }
 
+  showEditGroup = (group: Group) => {
+    this.alertController.create({
+      header: 'Editar Grupo',
+      subHeader: 'Elige un nombre para tu grupo',
+      inputs: [{
+        type: 'text',
+        name: 'groupName',
+        placeholder: 'Nombre del grupo',
+        value: group.name
+      }],
+      buttons: [{
+        role: 'cancel',
+        text: 'Cancelar'
+      }, {
+        text: 'Guardar',
+        handler: (value) => {
+          group.name = value.groupName.toUpperCase();
+          this.groupsService.update(group)
+            .then(() => {
+              this.toastController.create({
+                message: `El grupo ${group.name} ha sido guardado exitosamente`,
+                duration: 3000
+              }).then(toast => toast.present());
+            });
+        }
+      }]
+    }).then(alert => alert.present());
+  }
+
+  showDeleteGroup = (group: Group) => {
+    this.alertController.create({
+      header: 'Eliminar Grupo',
+      subHeader: group.name,
+      message: 'Al eliminar el grupo se eliminaran los alumnos, asistencias y actividades registradas',
+      buttons: [{
+        role: 'cancel',
+        text: 'Cancelar'
+      }, {
+        text: 'Eliminar',
+        handler: (value) => {
+          this.groupsService.delete(group.uid)
+            .then(() => this.toastController.create({
+              message: `El grupo ${group.name} fue eliminado exitosamente`,
+              duration: 3000
+            }).then(toast => toast.present()));
+        }
+      }]
+    }).then(alert => alert.present());
+  }
+
   showGroupAction = (group: Group) => {
     this.actionSheetController.create({
       header: `Grupo ${group.name}`,
