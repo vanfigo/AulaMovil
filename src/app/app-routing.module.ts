@@ -4,8 +4,17 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 const routes: Routes = [
   { path: 'login', loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule) },
   { path: 'home', loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule) },
-  { path: 'group', loadChildren: () => import('./pages/group/group.module').then( m => m.GroupPageModule) },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'group/:groupUid/students',
+    loadChildren: () => import('./pages/students/students.module').then(m => m.StudentsPageModule) },
+  { path: 'group/:groupUid/assistance',
+    loadChildren: () => import('./pages/assistance/assistance.module').then(m => m.AssistancePageModule) },
+  { path: 'group/:groupUid/activities',
+    loadChildren: () => import('./pages/activities/activities.module').then(m => m.ActivitiesPageModule) },
+  { path: 'group/:groupUid/activities-report',
+    loadChildren: () => import('./pages/activities-report/activities-report.module').then(m => m.ActivitiesReportModule) },
+  { path: 'group/:groupUid/assistance-report',
+    loadChildren: () => import('./pages/assistance-report/assistance-report.module').then(m => m.AssistanceReportModule) },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 
 @NgModule({

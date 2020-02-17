@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar color="aula-movil">
-    <ion-title>Aula Movil</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="authService.signOut()">Salir</ion-button>
     </ion-buttons>
@@ -8,19 +7,50 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-list-header>Cíclo Escolar</ion-list-header>
-    <app-school-year (schoolYear)="schoolYearSelected($event)"></app-school-year>
-    <ion-list-header *ngIf="schoolYear">Grupos</ion-list-header>
-    <app-groups></app-groups>
+    <ion-list-header mode="ios">Cíclo Escolar</ion-list-header>
+    <ion-item (click)="showAddSchoolYear()" button>
+      <ion-icon slot="start" name="calendar-outline"></ion-icon>
+      <ion-input placeholder="Selecciona un cíclo escolar" readonly></ion-input>
+    </ion-item>
+    <ion-list-header mode="ios" *ngIf="schoolYear">Grupos</ion-list-header>
   </ion-list>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <ion-grid *ngIf="!loading && schoolYear">
+    <ion-row>
+      <ion-col size="6" *ngFor="let group of groups" class="ion-no-padding">
+        <ion-card>
+          <ion-card-content class="ion-no-padding">
+            <ion-list class="ion-no-padding">
+              <ion-item-sliding>
+                <ion-item-options side="start">
+                  <ion-item-option (click)="showEditGroup(group)" color="warning">
+                    <ion-icon slot="icon-only" name="create"></ion-icon>
+                  </ion-item-option>
+                  <ion-item-option color="danger" (click)="showDeleteGroup(group)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                  </ion-item-option>
+                </ion-item-options>
+                <ion-item lines="none" detail (click)="showGroupAction(group)" button color="aula-movil">
+                  <ion-label class="ion-text-wrap">{{group.name}}</ion-label>
+                </ion-item>
+              </ion-item-sliding>
+              <ion-item>
+                <ion-label>Alumnos</ion-label>
+                <ion-note slot="end" color="aula-movil">{{group.students}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label>Actividades</ion-label>
+                <ion-note slot="end" color="aula-movil">{{group.activities}}</ion-note>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="aula-movil" [disabled]="!schoolYear">
-      <ion-icon name="add"></ion-icon>
+    <ion-fab-button color="aula-movil" [disabled]="!schoolYear" (click)="showAddGroup()">
+      <ion-icon name="people-circle-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="groupsComponent.showAddGroup()">
-        <ion-icon name="people-circle-outline" color="aula-movil"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 </ion-content>

@@ -5,9 +5,8 @@ import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs';
 import {Plugins} from '@capacitor/core';
 import {Platform} from '@ionic/angular';
+import {StorageService} from './storage.service';
 import IdTokenResult = firebase.auth.IdTokenResult;
-
-const { Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,8 @@ export class AuthService {
 
   constructor(private afAuth: AngularFireAuth,
               private router: Router,
-              private platform: Platform) {
+              private platform: Platform,
+              private storageService: StorageService) {
     afAuth.authState.subscribe(user => {
       if (user) {
         afAuth.idTokenResult.subscribe((data: IdTokenResult) => {
@@ -41,7 +41,6 @@ export class AuthService {
   }
 
   googleSignIn = async () => {
-    console.log(this.platform.platforms());
     if (this.platform.is('capacitor')) {
       Plugins.GoogleAuth.signIn()
         .then(googleUser => {
@@ -58,7 +57,7 @@ export class AuthService {
   }
 
   signOut = async () => {
-    await Storage.clear();
+    await this.storageService.clear();
     await this.afAuth.auth.signOut();
   }
 }
