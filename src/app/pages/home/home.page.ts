@@ -128,16 +128,16 @@ export class HomePage {
           this.navController.navigateForward(['/group', group.uid, 'activities']);
         }
       }, {
-        text: 'Reporte de Asistencia',
+        text: 'Reporte de Asistencias',
         icon: 'checkmark-done-circle',
         handler: () => {
-          console.log('Reporte de Asistencia clicked');
+          this.navController.navigateForward(['/group', group.uid, 'assistance-report']);
         }
       }, {
         text: 'Reporte de Actividades',
         icon: 'school',
         handler: () => {
-          this.navController.navigateForward(['/group', group.uid, 'activitiesReport']);
+          this.navController.navigateForward(['/group', group.uid, 'activities-report']);
         }
       }, {
         text: 'Cancelar',

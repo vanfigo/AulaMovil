@@ -5,6 +5,7 @@ export class Group {
   uid?: string;
   name: string;
   students: number;
+  activities: number;
   schoolYear: string;
   creationDate: Date | Timestamp;
 
@@ -13,6 +14,7 @@ export class Group {
     this.schoolYear = schoolYear;
     this.creationDate = new Date();
     this.students = 0;
+    this.activities = 0;
     this.uid = null;
   }
 
