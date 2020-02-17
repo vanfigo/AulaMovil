@@ -43,8 +43,14 @@ export class StudentsService {
 
   filterStudents = (filterValue: string | number): Student[] => {
     if (typeof filterValue === 'string' && isNaN(Number(filterValue))) {
+      const replacedValue = filterValue
+        .replace(/[áÁ]/g, 'a')
+        .replace(/[éÉ]/g, 'e')
+        .replace(/[íÍ]/g, 'i')
+        .replace(/[óÓ]/g, 'o')
+        .replace(/[úÚ]/g, 'u').toString();
       return this.students
-        .filter(student => filterValue.split(' ').every(filter =>
+        .filter(student => replacedValue.split(' ').every(filter =>
           student.name.toLowerCase().indexOf(filter) >= 0 ||
           student.lastName.toLowerCase().indexOf(filter) >= 0));
     } else {
