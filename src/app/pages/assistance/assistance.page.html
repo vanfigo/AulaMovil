@@ -31,7 +31,7 @@
           <ion-icon name="person"></ion-icon>
           <ion-label>{{student?.listNumber}}</ion-label>
         </ion-chip>
-        <ion-label>{{student.name}} {{student.lastName}}</ion-label>
+        <ion-label>{{student.displayName}} {{student.displayLastName}}</ion-label>
         <ion-checkbox slot="end" color="aula-movil" [name]="student.uid"
                       (ionChange)="selectStudent($event, student)"></ion-checkbox>
       </ion-item>
