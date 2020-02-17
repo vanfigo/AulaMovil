@@ -23,3 +23,16 @@ exports.updateStudentsTotal = functions.firestore.document('users/{userUid}/grou
     }
     return null;
 });
+
+exports.updateActivitiesTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/activities/{activityUid}')
+  .onWrite((snapshot, context) => {
+    const activityRef = snapshot.after.ref;
+    const activitiesCollection = activityRef.parent;
+    if (activityRef.parent.parent) {
+      const groupRef = activityRef.parent.parent;
+      return activitiesCollection.listDocuments().then((documents) =>
+        groupRef.update({activities: documents.length})
+      ).catch(console.error);
+    }
+    return null;
+  });
