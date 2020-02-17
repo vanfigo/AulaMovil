@@ -18,7 +18,6 @@ export class ModalGradesComponent implements OnInit {
   students: Student[];
   @Input() activity: Activity;
   scoreFormGroup: FormGroup;
-  toolbarErrorText: string;
 
   constructor(public modalController: ModalController,
               private studentsService: StudentsService,
@@ -46,6 +45,7 @@ export class ModalGradesComponent implements OnInit {
     Object.entries(this.scoreFormGroup.value).forEach((controlValue: [string, number]) =>
       grades.push({...new Grade(controlValue[0], controlValue[1])}));
     this.activity.grades = grades;
+    this.activity.isSaved = true;
     this.activitiesService.update(this.activity)
       .then(() => this.toastController.create({
         message: `Las calificaciones para la <strong>Actividad ${this.activity.position}: ` +

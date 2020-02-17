@@ -33,7 +33,8 @@
             <p *ngIf="!activity.dueDate">Sin fecha de entrega</p>
             <p>{{activity.dueDate | date: 'mediumDate'}}</p>
           </ion-label>
-          <ion-badge color="aula-movil" slot="end">Mínimo: {{activity.minScore}}</ion-badge>
+          <ion-badge *ngIf="activity.isSaved" color="aula-movil" slot="end">Calificada</ion-badge>
+          <ion-badge *ngIf="!activity.isSaved" color="medium" slot="end">Por Calificar</ion-badge>
         </ion-item>
       </ion-item-sliding>
     </ion-reorder-group>

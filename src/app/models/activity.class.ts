@@ -10,6 +10,7 @@ export class Activity {
   grades: Grade[];
   dueDate: Date | Timestamp;
   creationDate: Date | Timestamp;
+  isSaved: boolean;
 
   constructor(name: string, dueDate: Date | Timestamp, minScore: number) {
     this.name = name;
@@ -17,6 +18,7 @@ export class Activity {
     this.minScore = minScore;
     this.creationDate = new Date();
     this.grades = [];
+    this.isSaved = false;
   }
 
 }
