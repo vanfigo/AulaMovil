@@ -1,7 +1,15 @@
 import {Component, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {SchoolYear} from '../../models/school-year.class';
-import {ActionSheetController, AlertController, IonInput, NavController, PickerController, ToastController} from '@ionic/angular';
+import {
+  ActionSheetController,
+  AlertController,
+  IonInput,
+  LoadingController,
+  NavController,
+  PickerController,
+  ToastController
+} from '@ionic/angular';
 import {StorageService} from '../../services/storage.service';
 import * as moment from 'moment';
 import {Group} from '../../models/group.class';
@@ -26,7 +34,8 @@ export class HomePage {
               private storageService: StorageService,
               private groupsService: GroupsService,
               private actionSheetController: ActionSheetController,
-              private navController: NavController) {
+              private navController: NavController,
+              private loadingController: LoadingController) {
     storageService.get('schoolYear')
       .then((schoolYear: any) => {
         if (schoolYear) {
@@ -145,12 +154,18 @@ export class HomePage {
         text: 'Cancelar'
       }, {
         text: 'Eliminar',
-        handler: (value) => {
-          this.groupsService.delete(group.uid)
-            .then(() => this.toastController.create({
-              message: `El grupo ${group.name} fue eliminado exitosamente`,
-              duration: 3000
-            }).then(toast => toast.present()));
+        handler: () => {
+          this.loadingController.create({ message: 'Eliminando...' })
+            .then(async (load) => {
+              await load.present();
+              this.groupsService.delete(group.uid).then(async () => {
+                await load.dismiss();
+                this.toastController.create({
+                  message: `El grupo ${group.name} fue eliminado exitosamente`,
+                  duration: 3000
+                }).then(toast => toast.present());
+              });
+            });
         }
       }]
     }).then(alert => alert.present());
