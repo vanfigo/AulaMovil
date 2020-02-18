@@ -24,7 +24,7 @@ export class ModalActivitiesComponent implements OnInit {
     this.formActivity = new FormGroup({
       name: new FormControl(this.activity ? this.activity.name : ''),
       dueDate: new FormControl(this.activity && this.activity.dueDate ? this.activity.dueDate.toLocaleString() : ''),
-      minScore: new FormControl(this.activity ? this.activity.minScore : 5, [
+      minScore: new FormControl(this.activitiesService.minScore, [
         Validators.required,
         Validators.min(0),
         Validators.max(10)
@@ -32,28 +32,16 @@ export class ModalActivitiesComponent implements OnInit {
     });
   }
 
-  getMinScoreError = () => {
-    const errors = this.formActivity.get('minScore').errors;
-    if (errors.required) {
-      return 'requerido';
-    } else if (errors.max) {
-      return 'Máximo 10';
-    } else {
-      return 'Mínimo 0';
-    }
-  }
-
   saveActivity = () => {
-    const {name, dueDate, minScore} = this.formActivity.value;
+    const {name, dueDate} = this.formActivity.value;
     const truncatedDate = dueDate ?
       new Date(new Date(dueDate).getFullYear(), new Date(dueDate).getMonth(), new Date(dueDate).getDate()) : null;
     if (this.activity) {
       this.activity.name = name;
       this.activity.dueDate = truncatedDate;
-      this.activity.minScore = minScore;
       this.activitiesService.update(this.activity).then(() => this.presentToast(this.activity));
     } else {
-      const activity: Activity = new Activity(name, truncatedDate, minScore);
+      const activity: Activity = new Activity(name, truncatedDate);
       this.activitiesService.save(activity).then(() => this.presentToast(activity));
     }
   }

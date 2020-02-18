@@ -35,6 +35,7 @@ export class ReportCardPage {
 
   generateReportCard = () => {
     this.reportCards = [];
+    this.reportCardGroup.controls = {};
     this.activities.forEach(activity => {
       const grade = activity.grades.find(storedGrade => storedGrade.studentUid === this.student.uid);
       const score = grade ? grade.score : this.activitiesService.minScore;
@@ -51,7 +52,7 @@ export class ReportCardPage {
   }
 
   showScorePicker = async (reportCard: ReportCard) => {
-    const picker = await this.pickerController.create({
+    this.pickerController.create({
       columns: [{
         name: 'score',
         options: this.activitiesService.options
@@ -85,8 +86,7 @@ export class ReportCardPage {
             });
         }
       }]
-    });
-    await picker.present();
+    }).then(picker => picker.present());
   }
 
 }

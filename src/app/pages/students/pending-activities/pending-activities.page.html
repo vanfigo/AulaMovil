@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Actividades Pendientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-toolbar>
+    <ion-segment (ionChange)="showActivities($event)">
+      <ion-segment-button value="pending">
+        <ion-label>Pendientes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="registered">
+        <ion-label>Calificadas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <ion-searchbar placeholder="Busca actividades" class="ion-padding"
+                 cancelButtonIcon (ionChange)="filterActivities($event)"></ion-searchbar>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <ion-list [formGroup]="pendingActivitiesGroup" *ngIf="!loading">
+    <app-empty-list *ngIf="reportCards?.length === 0" emptyText="No se encontraron actividades" [displayBadge]="true"></app-empty-list>
+    <ion-item *ngFor="let reportCard of reportCards | pendingActivities: category" button (click)="showScorePicker(reportCard)" detail>
+      <ion-chip slot="start">
+        <ion-icon name="book"></ion-icon>
+        <ion-label>{{reportCard.position}}</ion-label>
+      </ion-chip>
+      <ion-label>{{reportCard.name ? reportCard.name : 'Sin nombre'}}</ion-label>
+      <ion-input slot="end" readonly
+                 [name]="reportCard.activityUid" [formControlName]="reportCard.activityUid" class="ion-text-center"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -13,6 +13,7 @@ import {environment} from '../environments/environment';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {DeactivateGuard} from './guards/deactivate.guard';
+import {PendingActivitiesPipe} from './pipes/pending-activities.pipe';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +29,7 @@ import {DeactivateGuard} from './guards/deactivate.guard';
     StatusBar,
     SplashScreen,
     DeactivateGuard,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
   ],
   entryComponents: [],
   bootstrap: [AppComponent]

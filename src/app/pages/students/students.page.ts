@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {StudentsService} from '../../services/students.service';
 import {Student} from '../../models/student.class';
 import {GroupsService} from '../../services/groups.service';
-import {AlertController, LoadingController, ToastController} from '@ionic/angular';
+import {AlertController, LoadingController, NavController, ToastController} from '@ionic/angular';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -20,7 +20,8 @@ export class StudentsPage implements OnInit {
               private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private toastController: ToastController,
-              private loadingController: LoadingController) { }
+              private loadingController: LoadingController,
+              private navController: NavController) { }
 
   async ngOnInit() {
     const loadingPop = await this.loadingController.create({ message: 'Cargando...' });
@@ -141,5 +142,9 @@ export class StudentsPage implements OnInit {
       }]
     }).then(alert => alert.present());
   }
+
+  showPendingActivities = (student: Student) => this.navController
+    .navigateForward(['pending-activities'], { state: { student }, relativeTo: this.activatedRoute })
+
 
 }

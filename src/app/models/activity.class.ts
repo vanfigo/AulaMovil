@@ -6,16 +6,14 @@ export class Activity {
   uid?: string;
   name?: string;
   position: number;
-  minScore: number;
   grades: Grade[];
   dueDate: Date | Timestamp;
   creationDate: Date | Timestamp;
   isSaved: boolean;
 
-  constructor(name: string, dueDate: Date | Timestamp, minScore: number) {
+  constructor(name: string, dueDate: Date | Timestamp) {
     this.name = name;
     this.dueDate = dueDate;
-    this.minScore = minScore;
     this.creationDate = new Date();
     this.grades = [];
     this.isSaved = false;

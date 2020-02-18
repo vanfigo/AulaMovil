@@ -26,11 +26,6 @@
                       cancelText="Cancelar" doneText="Seleccionar"
                       [monthNames]="monthNames" formControlName="dueDate"></ion-datetime>
       </ion-item>
-      <ion-item>
-        <ion-label position="floating">Calificación Mínima</ion-label>
-        <ion-input type="number" formControlName="minScore"></ion-input>
-        <ion-note color="danger" slot="end" *ngIf="formActivity.get('minScore').errors">{{getMinScoreError()}}</ion-note>
-      </ion-item>
     </form>
   </ion-list>
 </ion-content>
