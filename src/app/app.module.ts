@@ -16,7 +16,7 @@ import {DeactivateGuard} from './guards/deactivate.guard';
 import {PendingActivitiesPipe} from './pipes/pending-activities.pipe';
 
 @NgModule({
-  declarations: [AppComponent, PendingActivitiesPipe],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -29,7 +29,7 @@ import {PendingActivitiesPipe} from './pipes/pending-activities.pipe';
     StatusBar,
     SplashScreen,
     DeactivateGuard,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
   ],
   entryComponents: [],
   bootstrap: [AppComponent]

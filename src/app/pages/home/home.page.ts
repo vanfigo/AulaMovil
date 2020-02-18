@@ -25,7 +25,7 @@ export class HomePage {
   groups: Group[];
   schoolYear: SchoolYear;
   loading = false;
-  @ViewChild(IonInput, {static: false}) schoolYearSelect: IonInput;
+  @ViewChild(IonInput) schoolYearSelect: IonInput;
 
   constructor(public authService: AuthService,
               private pickerController: PickerController,

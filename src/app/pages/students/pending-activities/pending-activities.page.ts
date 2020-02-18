@@ -21,6 +21,7 @@ export class PendingActivitiesPage implements OnInit {
   pendingActivitiesGroup: FormGroup;
   student: Student;
   activities: Activity[];
+  category: string;
 
   constructor(private activitiesService: ActivitiesService,
               private router: Router,
@@ -35,11 +36,13 @@ export class PendingActivitiesPage implements OnInit {
 
   ngOnInit() {
     this.activitiesSegment.value = 'pending';
+    this.category = this.activitiesSegment.value;
   }
 
   generateReportCards = () => {
     this.activitiesService.findAllByGroupUid().subscribe((activities: Activity[]) => {
       this.activities = activities;
+      this.activitiesService.activities = activities;
       this.reportCards = [];
       this.pendingActivitiesGroup.controls = {};
       this.activities.forEach(activity => {
@@ -53,7 +56,16 @@ export class PendingActivitiesPage implements OnInit {
   }
 
   showActivities = (event: CustomEvent) => {
-    console.log(event);
+    this.category = this.activitiesSegment.value;
+  }
+
+  filterActivities = (event: CustomEvent) => {
+    const filterValue: string = event.detail.value.toLowerCase();
+    if (filterValue.length > 0) {
+      this.activities = this.activitiesService.filterActivities(filterValue);
+    } else {
+      this.activities = [...this.activitiesService.activities];
+    }
   }
 
   showScorePicker = async (reportCard: ReportCard) => {

@@ -20,9 +20,9 @@
   <ion-searchbar placeholder="Busca actividades" class="ion-padding"
                  cancelButtonIcon (ionChange)="filterActivities($event)"></ion-searchbar>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
-  <app-empty-list *ngIf="reportCards?.length === 0" emptyText="No se encontraron actividades" [displayBadge]="true"></app-empty-list>
   <ion-list [formGroup]="pendingActivitiesGroup" *ngIf="!loading">
-    <ion-item *ngFor="let reportCard of reportCards" button (click)="showScorePicker(reportCard)" detail>
+    <app-empty-list *ngIf="reportCards?.length === 0" emptyText="No se encontraron actividades" [displayBadge]="true"></app-empty-list>
+    <ion-item *ngFor="let reportCard of reportCards | pendingActivities: category" button (click)="showScorePicker(reportCard)" detail>
       <ion-chip slot="start">
         <ion-icon name="book"></ion-icon>
         <ion-label>{{reportCard.position}}</ion-label>

@@ -8,6 +8,7 @@ import {PendingActivitiesPageRoutingModule} from './pending-activities-routing.m
 
 import {PendingActivitiesPage} from './pending-activities.page';
 import {SharedModule} from '../../../components/shared/shared.module';
+import {PipesModule} from '../../../pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import {SharedModule} from '../../../components/shared/shared.module';
     IonicModule,
     PendingActivitiesPageRoutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule
   ],
   declarations: [PendingActivitiesPage]
 })
