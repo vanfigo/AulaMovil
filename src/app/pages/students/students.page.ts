@@ -91,12 +91,12 @@ export class StudentsPage implements OnInit {
       inputs: [{
         type: 'text',
         name: 'name',
-        value: student.name,
+        value: student.displayName,
         placeholder: 'Nombres del alumno'
       }, {
         type: 'text',
         name: 'lastName',
-        value: student.lastName,
+        value: student.displayLastName,
         placeholder: 'Apellidos del alumno'
       }],
       buttons: [{
@@ -106,6 +106,7 @@ export class StudentsPage implements OnInit {
         text: 'Guardar',
         handler: (value) => {
           const updatedStudent = new Student(value.name, value.lastName);
+          delete updatedStudent.creationDate; // don't update creation date
           this.studentsService.update(student.uid, updatedStudent)
             .then(() => {
               this.toastController.create({

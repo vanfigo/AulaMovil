@@ -96,7 +96,7 @@ export class ActivitiesService {
     .then((snapshot: QuerySnapshot<Activity>) =>
       this.getCollectionActivities().add({ ...activity, position: snapshot.size + 1 }))
 
-  update = (activity: Activity) => this.getCollectionActivities().doc(activity.uid).set({...activity});
+  update = (activity: Activity) => this.getCollectionActivities().doc(activity.uid).update({...activity});
 
   delete = (activity: Activity) =>
     this.getDocumentGroup().collection(this.collectionName, ref => ref.where('position', '>', activity.position))

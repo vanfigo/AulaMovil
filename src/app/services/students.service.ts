@@ -37,7 +37,7 @@ export class StudentsService {
 
   save = (student: Student) => this.getCollectionStudents().add({...student});
 
-  update = (uid: string, student: Student) => this.getCollectionStudents().doc(uid).set({...student});
+  update = (uid: string, student: Student) => this.getCollectionStudents().doc(uid).update({...student});
 
   delete = (uid: string) => this.getCollectionStudents().doc(uid).delete();
 

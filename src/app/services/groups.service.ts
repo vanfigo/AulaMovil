@@ -49,7 +49,7 @@ export class GroupsService {
 
   save = (group: Group) => this.getCollectionGroup().add({...group});
 
-  update = (group: Group) => this.getCollectionGroup().doc(group.uid).set({...group});
+  update = (group: Group) => this.getCollectionGroup().doc(group.uid).update({...group});
 
   delete = async (groupUid: string) => {
     const batch = this.db.firestore.batch();
