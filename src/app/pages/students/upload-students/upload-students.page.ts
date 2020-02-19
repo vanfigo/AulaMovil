@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ToastController} from '@ionic/angular';
+import {NavController, ToastController} from '@ionic/angular';
 import * as papa from 'papaparse';
 import {ParseResult} from 'papaparse';
 import {Student} from '../../../models/student.class';
@@ -20,7 +20,8 @@ export class UploadStudentsPage implements OnInit {
   uploadStudentsFormGroup: FormGroup;
 
   constructor(private toastController: ToastController,
-              private studentsService: StudentsService) { }
+              private studentsService: StudentsService,
+              private navController: NavController) { }
 
   ngOnInit() {
     this.uploadStudentsFormGroup = new FormGroup({
@@ -36,7 +37,7 @@ export class UploadStudentsPage implements OnInit {
   uploadStudentsFile = () => {
     this.students = [];
     this.loading = true;
-    if (this.file.type === 'text/csv') {
+    if (this.file.type === 'text/csv' || this.file.type === 'text/comma-separated-values') {
       papa.parse(this.file, {
         header: this.withHeaders,
         delimiter: ',',
@@ -68,7 +69,7 @@ export class UploadStudentsPage implements OnInit {
       });
     } else {
       this.toastController.create({
-        message: 'Solo se permiten archivos <strong>CSV</strong>',
+        message: `Solo se permiten archivos <strong>CSV</strong>: ${this.file.type}`,
         duration: 3000
       }).then(toast => toast.present());
     }
@@ -83,7 +84,10 @@ export class UploadStudentsPage implements OnInit {
     this.toastController.create({
       message: `${this.students.length} ${this.students.length === 1 ? 'alumno fue dado' : 'alumnos fueron dados'} de alta en el grupo`,
       duration: 3000
-    }).then(toast => toast.present());
+    }).then(async toast => {
+      await toast.present();
+      this.navController.back();
+    });
   }
 
 }

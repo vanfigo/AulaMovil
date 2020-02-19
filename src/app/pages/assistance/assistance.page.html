@@ -11,7 +11,7 @@
     <ion-list-header mode="ios">Fecha de asistencia</ion-list-header>
     <ion-item detail>
       <ion-label>Asistencia</ion-label>
-      <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha de asistencia"
+      <ion-datetime display-format="DD/MMMM/YYYY" placeholder="Fecha de asistencia" [(ngModel)]="assistanceDate"
                     cancelText="Cancelar" doneText="Seleccionar" [monthNames]="monthNames"
                     #datetime (ionChange)="validateAssistance(datetime)"></ion-datetime>
     </ion-item>

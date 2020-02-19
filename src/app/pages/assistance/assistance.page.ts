@@ -21,6 +21,7 @@ export class AssistancePage implements OnInit {
   students: Student[];
   selectedStudents: Student[] = [];
   assistance: Assistance;
+  assistanceDate: Date;
   studentCheckBoxSub = new Subscription();
   @ViewChildren(IonCheckbox) studentCheckbox: QueryList<IonCheckbox>;
   monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -33,13 +34,16 @@ export class AssistancePage implements OnInit {
               private activatedRoute: ActivatedRoute,
               private loadingController: LoadingController) { }
 
-  async ngOnInit() {
-    const loadingPop = await this.loadingController.create({ message: 'Cargando...' });
-    await loadingPop.present();
-    this.groupsService.findByUid(this.activatedRoute.snapshot.params.groupUid).toPromise().then(group => {
-      this.groupsService.group = group;
-      loadingPop.dismiss();
-    });
+  ngOnInit() {
+    this.loadingController.create({ message: 'Cargando...' })
+      .then(async loadingPop => {
+        await loadingPop.present();
+        this.groupsService.findByUid(this.activatedRoute.snapshot.params.groupUid).toPromise().then(group => {
+          this.groupsService.group = group;
+          this.assistanceDate = moment().toDate();
+          loadingPop.dismiss();
+        });
+      });
   }
 
   ionViewDidEnter() {
