@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ModalController, ToastController} from '@ionic/angular';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import {Activity} from '../../../models/activity.class';
 import {ActivitiesService} from '../../../services/activities.service';
 
@@ -23,12 +23,7 @@ export class ModalActivitiesComponent implements OnInit {
   ngOnInit() {
     this.formActivity = new FormGroup({
       name: new FormControl(this.activity ? this.activity.name : ''),
-      dueDate: new FormControl(this.activity && this.activity.dueDate ? this.activity.dueDate.toLocaleString() : ''),
-      minScore: new FormControl(this.activitiesService.minScore, [
-        Validators.required,
-        Validators.min(0),
-        Validators.max(10)
-      ])
+      dueDate: new FormControl(this.activity && this.activity.dueDate ? this.activity.dueDate.toLocaleString() : '')
     });
   }
 

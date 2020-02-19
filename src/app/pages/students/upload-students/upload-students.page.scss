@@ -1,0 +1,8 @@
+ion-col {
+  border-bottom: solid 1px var(--ion-color-light);
+  padding: 5px;
+}
+
+ion-col.ion-align-items-center {
+  display: flex;
+}

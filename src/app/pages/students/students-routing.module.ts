@@ -5,8 +5,12 @@ import {StudentsPage} from './students.page';
 
 const routes: Routes = [
   { path: '', component: StudentsPage },
-  { path: 'pending-activities',
+  {
+    path: 'pending-activities',
     loadChildren: () => import('./pending-activities/pending-activities.module').then(m => m.PendingActivitiesPageModule)
+  },
+  { path: 'upload-students',
+    loadChildren: () => import('./upload-students/upload-students.module').then( m => m.UploadStudentsPageModule)
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

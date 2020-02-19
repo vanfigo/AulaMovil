@@ -146,5 +146,7 @@ export class StudentsPage implements OnInit {
   showPendingActivities = (student: Student) => this.navController
     .navigateForward(['pending-activities'], { state: { student }, relativeTo: this.activatedRoute })
 
+  showUploadStudents = () => this.navController
+    .navigateForward(['upload-students'], { relativeTo: this.activatedRoute })
 
 }
