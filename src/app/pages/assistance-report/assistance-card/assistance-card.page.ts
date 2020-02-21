@@ -18,7 +18,6 @@ export class AssistanceCardPage implements OnInit {
   initialDate: Date;
   finalDate: Date;
   loading = true;
-  uidFormat = 'YYYYMMDD';
   notAssisted = 0;
   assistances: Assistance[];
   assistanceCards: AssistanceCard[] = [];
@@ -31,10 +30,11 @@ export class AssistanceCardPage implements OnInit {
       this.initialDate = router.getCurrentNavigation().extras.state.initialDate;
       this.finalDate = router.getCurrentNavigation().extras.state.finalDate;
       this.assistancesService.findByDateRange(
-        moment(this.initialDate).format(this.uidFormat), moment(this.finalDate).format(this.uidFormat))
+        moment(this.initialDate).format(this.assistancesService.uidFormat),
+        moment(this.finalDate).format(this.assistancesService.uidFormat))
         .toPromise().then((assistances: Assistance[]) => {
           this.assistances = assistances;
-        this.generateAssistanceCards(assistances);
+          this.generateAssistanceCards(assistances);
       });
     }
   }
@@ -45,7 +45,7 @@ export class AssistanceCardPage implements OnInit {
     const diff = moment(this.finalDate).diff(this.initialDate, 'days');
     for (let i = 0; i <= diff; i++) {
       const date = moment(this.initialDate).add(i, 'days').toDate();
-      const assistanceUid = moment(date).format(this.uidFormat);
+      const assistanceUid = moment(date).format(this.assistancesService.uidFormat);
       const assistance = assistances.find(storedAssistance => storedAssistance.uid === assistanceUid);
       let notAssisted: boolean;
       if (assistance) {
