@@ -13,7 +13,6 @@ import {environment} from '../environments/environment';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {DeactivateGuard} from './guards/deactivate.guard';
-import {PendingActivitiesPipe} from './pipes/pending-activities.pipe';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,7 +22,7 @@ import {PendingActivitiesPipe} from './pipes/pending-activities.pipe';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'aula-movil'),
     AngularFireAuthModule,
-    AngularFirestoreModule,
+    AngularFirestoreModule
   ],
   providers: [
     StatusBar,

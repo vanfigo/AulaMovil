@@ -4,6 +4,12 @@ import {Student} from '../../../models/student.class';
 import {GroupsService} from '../../../services/groups.service';
 import {ActivatedRoute} from '@angular/router';
 import {StudentsService} from '../../../services/students.service';
+import {Assistance} from '../../../models/assistance.class';
+import {AssistancesService} from '../../../services/assistances.service';
+import * as papa from 'papaparse';
+import * as moment from 'moment';
+import {FilesService} from '../../../services/files.service';
+import {FileType} from '../../../models/file-type.class';
 
 @Component({
   selector: 'app-student-selection',
@@ -25,7 +31,9 @@ export class StudentSelectionPage implements OnInit {
               private studentsService: StudentsService,
               private activatedRoute: ActivatedRoute,
               private navController: NavController,
-              private toastController: ToastController) { }
+              private toastController: ToastController,
+              private assistancesService: AssistancesService,
+              private filesService: FilesService) { }
 
   async ngOnInit() {
     const loadingPop = await this.loadingController.create({ message: 'Cargando...' });
@@ -74,6 +82,38 @@ export class StudentSelectionPage implements OnInit {
         duration: 3000
       }).then(toast => toast.present());
     }
+  }
+
+  createAssistancesReport = () => {
+    const data: any[][] = [];
+    const fields: string[] = Array('Nombre del Alumno');
+    this.assistancesService.findByDateRange(
+      moment(this.initialDate).format(this.assistancesService.uidFormat),
+      moment(this.finalDate).format(this.assistancesService.uidFormat))
+      .toPromise().then((assistances: Assistance[]) => {
+      const diff = moment(this.finalDate).diff(this.initialDate, 'days');
+      this.students.forEach((student: Student, studentIndex: number) => {
+        data[studentIndex] = Array(`${student.displayName} ${student.displayLastName}`);
+        data[studentIndex].push(0);
+        for (let dateIndex = 0; dateIndex <= diff; dateIndex++) {
+          const date = moment(this.initialDate).add(dateIndex, 'days').toDate();
+          const assistanceUid = moment(date).format(this.assistancesService.uidFormat);
+          if (studentIndex === 0) {
+            fields.push(moment(date).format('DD/MM/YYYY'));
+          }
+          const assistance = assistances.find(storedAssistance => storedAssistance.uid === assistanceUid);
+          if (assistance) {
+            const notAssisted: boolean = !!assistance.students.find(storedStudent => storedStudent.uid === student.uid);
+            data[studentIndex].splice(dateIndex + 1, 0, notAssisted ? 1 : 0);
+            data[studentIndex][dateIndex + 2] += notAssisted ? 1 : 0;
+          } else {
+            data[studentIndex].splice(dateIndex + 1, 0, 0);
+          }
+        }
+      });
+      fields.push('Total de Faltas');
+      this.filesService.generateAndShareFile(new FileType('Reporte de Asistencias', 'csv'), papa.unparse({data, fields}));
+    });
   }
 
 }

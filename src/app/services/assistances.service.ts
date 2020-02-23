@@ -12,6 +12,7 @@ import {map} from 'rxjs/operators';
 export class AssistancesService {
 
   collectionName = 'assistance';
+  uidFormat = 'YYYYMMDD';
   students: Student[];
 
   constructor(private db: AngularFirestore,
