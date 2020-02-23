@@ -6,9 +6,10 @@ import {ActivatedRoute} from '@angular/router';
 import {StudentsService} from '../../../services/students.service';
 import {Assistance} from '../../../models/assistance.class';
 import {AssistancesService} from '../../../services/assistances.service';
-import {AngularFireStorage} from '@angular/fire/storage';
 import * as papa from 'papaparse';
 import * as moment from 'moment';
+import {FilesService} from '../../../services/files.service';
+import {FileType} from '../../../models/file-type.class';
 
 @Component({
   selector: 'app-student-selection',
@@ -32,7 +33,7 @@ export class StudentSelectionPage implements OnInit {
               private navController: NavController,
               private toastController: ToastController,
               private assistancesService: AssistancesService,
-              private fireStorage: AngularFireStorage) { }
+              private filesService: FilesService) { }
 
   async ngOnInit() {
     const loadingPop = await this.loadingController.create({ message: 'Cargando...' });
@@ -83,7 +84,7 @@ export class StudentSelectionPage implements OnInit {
     }
   }
 
-  shareAssistancesReport = () => {
+  createAssistancesReport = () => {
     const data: any[][] = [];
     const fields: string[] = Array('Nombre del Alumno');
     this.assistancesService.findByDateRange(
@@ -111,9 +112,7 @@ export class StudentSelectionPage implements OnInit {
         }
       });
       fields.push('Total de Faltas');
-      console.table(fields);
-      console.table(data);
-      console.log(papa.unparse({data, fields}));
+      this.filesService.generateAndShareFile(new FileType('Reporte de Asistencias', 'csv'), papa.unparse({data, fields}));
     });
   }
 
