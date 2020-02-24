@@ -27,7 +27,7 @@ export class FilesService {
         message: `Generando ${fileType.name}...`
       });
       await reportLoading.present();
-      Filesystem.writeFile({ directory: FilesystemDirectory.Documents, encoding: FilesystemEncoding.ASCII, path, data: fileContent })
+      Filesystem.writeFile({ directory: FilesystemDirectory.Documents, encoding: FilesystemEncoding.UTF16, path, data: fileContent })
         .then(() => {
           Filesystem.getUri({ directory: FilesystemDirectory.Documents, path })
             .then(async (result: GetUriResult) => {
