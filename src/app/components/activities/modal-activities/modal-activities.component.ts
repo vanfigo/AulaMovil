@@ -43,7 +43,8 @@ export class ModalActivitiesComponent implements OnInit {
 
   presentToast = (activity: Activity) => {
     this.toastController.create({
-      message: `La <strong>Actividad ${activity.position}: ${activity.name}</strong> ha sido guardada correctamente`,
+      message: `La <strong>Actividad ${activity.position}: ${activity.name ? activity.name : 'Sin nombre'}</strong>` +
+        ' ha sido guardada correctamente',
       duration: 3000
     }).then(toast => {
       toast.present();

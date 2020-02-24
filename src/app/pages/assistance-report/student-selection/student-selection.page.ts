@@ -93,8 +93,7 @@ export class StudentSelectionPage implements OnInit {
       .toPromise().then((assistances: Assistance[]) => {
       const diff = moment(this.finalDate).diff(this.initialDate, 'days');
       this.students.forEach((student: Student, studentIndex: number) => {
-        data[studentIndex] = Array(`${student.displayName} ${student.displayLastName}`);
-        data[studentIndex].push(0);
+        data[studentIndex] = [`${student.displayName} ${student.displayLastName}`, 0];
         for (let dateIndex = 0; dateIndex <= diff; dateIndex++) {
           const date = moment(this.initialDate).add(dateIndex, 'days').toDate();
           const assistanceUid = moment(date).format(this.assistancesService.uidFormat);

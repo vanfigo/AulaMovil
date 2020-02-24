@@ -5,6 +5,10 @@ import {GroupsService} from '../../../services/groups.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoadingController, NavController} from '@ionic/angular';
 import {Activity} from '../../../models/activity.class';
+import {FileType} from '../../../models/file-type.class';
+import * as papa from 'papaparse';
+import {ActivitiesService} from '../../../services/activities.service';
+import {FilesService} from '../../../services/files.service';
 
 @Component({
   selector: 'app-student-selection',
@@ -19,6 +23,8 @@ export class StudentSelectionPage implements OnInit {
   @Output() studentSelectedEvent = new EventEmitter<Student>();
 
   constructor(private studentsService: StudentsService,
+              private activitiesService: ActivitiesService,
+              private filesService: FilesService,
               private groupsService: GroupsService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -57,5 +63,34 @@ export class StudentSelectionPage implements OnInit {
     state: { activities: this.activities, student },
     relativeTo: this.activatedRoute
   })
+
+  createActivitiesReport = () => {
+    const data: any[][] = [];
+    const fields: string[] = Array('Nombre del Alumno');
+    console.table(this.activities);
+    console.table(this.students);
+    this.students.forEach((student: Student, studentIndex: number) => {
+      data[studentIndex] = [`${student.displayName} ${student.displayLastName}`, 0];
+      this.activities.forEach((activity: Activity, activityIndex: number) => {
+        if (studentIndex === 0) {
+          fields.push(`Actividad ${activity.position}: ${activity.name ? activity.name : 'Sin nombre'}`);
+        }
+        const grade = activity.grades.find(storedGrade => storedGrade.studentUid === student.uid);
+        let score = this.activitiesService.minScore;
+        if (grade) {
+          score = grade.score;
+        }
+        data[studentIndex].splice(activityIndex + 1, 0, score);
+        data[studentIndex][activityIndex + 2] += score;
+      });
+    });
+    fields.push('Promedio');
+    data.forEach((columns: any[]) => {
+      const activitiesSize = this.activities.length;
+      columns[activitiesSize + 1] = (columns[activitiesSize + 1] / activitiesSize).toFixed(2);
+    });
+    console.log(papa.unparse({data, fields}));
+    this.filesService.generateAndShareFile(new FileType('Reporte de Actividades', 'csv'), papa.unparse({data, fields}));
+  }
 
 }
