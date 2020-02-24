@@ -21,6 +21,7 @@ export class AuthService {
               private platform: Platform,
               private storageService: StorageService) {
     afAuth.authState.subscribe(user => {
+      console.log(user);
       if (user) {
         afAuth.idTokenResult.subscribe((data: IdTokenResult) => {
           if (this.router.url.startsWith('/login')) {
@@ -44,20 +45,32 @@ export class AuthService {
     if (this.platform.is('capacitor')) {
       Plugins.GoogleAuth.signIn()
         .then(googleUser => {
-          const credential = auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
-          this.afAuth.auth.signInWithCredential(credential)
-            .catch();
+          const oAuthCredential = auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
+          this.afAuth.auth.signInWithCredential(oAuthCredential)
+            .then((credential) => {
+              // console.log(credential.additionalUserInfo.isNewUser);
+              // if (credential.additionalUserInfo.isNewUser) {
+              //   this.router.navigateByUrl('');
+              // }
+            })
+            .catch(console.error);
         })
         .catch();
     } else {
-      this.afAuth.auth.signInWithPopup( new auth.GoogleAuthProvider().setCustomParameters({ prompt: 'select_account' }) )
-        .then()
-        .catch();
+      const provider = new auth.GoogleAuthProvider().setCustomParameters({ prompt: 'select_account' });
+      this.afAuth.auth.signInWithPopup(provider)
+        .then((credential) => {
+          // console.log(credential.additionalUserInfo.isNewUser);
+          // if (credential.additionalUserInfo.isNewUser) {
+          //   this.router.navigateByUrl('');
+          // }
+        })
+        .catch(console.error);
     }
   }
 
   signOut = async () => {
-    await this.storageService.clear();
+    await this.storageService.remove('schoolYear');
     await this.afAuth.auth.signOut();
   }
 }
