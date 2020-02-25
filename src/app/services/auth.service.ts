@@ -24,6 +24,7 @@ export class AuthService {
       console.log(user);
       if (user) {
         afAuth.idTokenResult.subscribe((data: IdTokenResult) => {
+          console.log(data.claims);
           if (this.router.url.startsWith('/login')) {
             this.router.navigateByUrl('home');
           }
