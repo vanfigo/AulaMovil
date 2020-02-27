@@ -7,30 +7,14 @@
     </ion-buttons>
     <ion-title>Aula Movil</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="showLandingPage()">
         <ion-icon slot="icon-only" name="help"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <ion-card>
-    <ion-card-header class="ion-text-center">
-      <ion-card-title>Inicia Sesión</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list class="ion-margin-bottom">
-        <ion-item>
-          <ion-icon slot="start" name="mail"></ion-icon>
-          <ion-input clear-input placeholder="Correo"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-icon slot="start" name="key"></ion-icon>
-          <ion-input clear-input type="password" placeholder="Contraseña"></ion-input>
-        </ion-item>
-      </ion-list>
-      <ion-button expand="block" color="primary">Ingresar</ion-button>
-      <ion-button expand="block" color="danger" (click)="authService.googleSignIn()">Iniciar con Google</ion-button>
-    </ion-card-content>
-  </ion-card>
+<ion-content class="ion-padding">
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <router-outlet></router-outlet>
+  <ion-button expand="block" color="danger" (click)="googleSignIn()">Iniciar con Google</ion-button>
 </ion-content>

@@ -19,8 +19,7 @@ export class AppComponent {
               private statusBar: StatusBar,
               private authService: AuthService) {
     this.authService.$userRetrieved.subscribe((value: boolean) => {
-      // this.showNavbar = value;
-      this.loading = false;
+      this.loading = !value;
     });
   }
 

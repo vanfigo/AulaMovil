@@ -1,0 +1,32 @@
+<ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+<form [formGroup]="signUpFormGroup">
+  <ion-item-divider mode="ios">
+    <ion-label>
+      Registrate en Aula Movil
+    </ion-label>
+  </ion-item-divider>
+  <ion-item>
+    <ion-icon name="mail" slot="start"></ion-icon>
+    <ion-input placeholder="Email" formControlName="email"></ion-input>
+    <ion-note slot="end" color="danger"
+              *ngIf="!signUpFormGroup.untouched && signUpFormGroup.controls.email.errors?.required">Campo Requerido</ion-note>
+    <ion-note slot="end" color="danger" *ngIf="signUpFormGroup.controls.email.errors?.email">Email Incorrecto</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon name="key" slot="start"></ion-icon>
+    <ion-input placeholder="Contraseña" formControlName="password" type="password"></ion-input>
+    <ion-note slot="end" color="danger"
+              *ngIf="!signUpFormGroup.untouched && signUpFormGroup.controls.password.errors?.required">Campo Requerido</ion-note>
+    <ion-note slot="end" color="danger" *ngIf="signUpFormGroup.controls.password.errors?.minlength">Minimo 6 letras</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon name="key" slot="start"></ion-icon>
+    <ion-input placeholder="Repetir Contraseña" formControlName="repassword" type="password"></ion-input>
+    <ion-note slot="end" color="danger"
+              *ngIf="!signUpFormGroup.untouched && signUpFormGroup.controls.repassword.errors?.required">Campo Requerido</ion-note>
+    <ion-note slot="end" color="danger" *ngIf="signUpFormGroup.controls.repassword.errors?.notequal">Password no coincide</ion-note>
+  </ion-item>
+  <ion-button expand="block" color="aula-movil" class="ion-margin-vertical"
+              (click)="createAccount()" [disabled]="signUpFormGroup.invalid">Crear Cuenta</ion-button>
+</form>
+<ion-button expand="block" fill="outline" color="medium" class="ion-margin-vertical" (click)="showSignIn()">Iniciar Sesion</ion-button>
