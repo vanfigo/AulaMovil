@@ -1,0 +1,24 @@
+<ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+<form [formGroup]="signInFormGroup">
+  <ion-item-divider mode="ios">
+    <ion-label>
+      Ingresa a Aula Movil
+    </ion-label>
+  </ion-item-divider>
+  <ion-item>
+    <ion-icon name="mail" slot="start"></ion-icon>
+    <ion-input placeholder="Email" formControlName="email"></ion-input>
+    <ion-note slot="end" color="danger"
+              *ngIf="!signInFormGroup.untouched && signInFormGroup.controls.email.errors?.required">Campo Requerido</ion-note>
+    <ion-note slot="end" color="danger" *ngIf="signInFormGroup.controls.email.errors?.email">Email Incorrecto</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon name="key" slot="start"></ion-icon>
+    <ion-input placeholder="Contraseña" formControlName="password" type="password"></ion-input>
+    <ion-note slot="end" color="danger"
+              *ngIf="!signInFormGroup.untouched && signInFormGroup.controls.password.errors?.required">Campo Requerido</ion-note>
+  </ion-item>
+  <ion-button expand="block" color="aula-movil" class="ion-margin-vertical"
+              (click)="signIn()" [disabled]="signInFormGroup.invalid">Ingresar</ion-button>
+</form>
+<ion-button expand="block" fill="outline" color="medium" class="ion-margin-vertical" (click)="showSignUp()">Registrarse</ion-button>

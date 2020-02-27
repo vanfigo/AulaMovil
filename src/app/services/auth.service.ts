@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {auth, User} from 'firebase';
 import {Router} from '@angular/router';
-import {ReplaySubject} from 'rxjs';
+import {ReplaySubject, Subscription} from 'rxjs';
 import {Plugins} from '@capacitor/core';
 import {Platform} from '@ionic/angular';
 import {StorageService} from './storage.service';
@@ -15,6 +15,7 @@ export class AuthService {
 
   public user: User;
   $userRetrieved = new ReplaySubject<boolean>(1);
+  claimsSub = new Subscription();
 
   constructor(private afAuth: AngularFireAuth,
               private router: Router,
@@ -23,7 +24,7 @@ export class AuthService {
     afAuth.authState.subscribe(user => {
       console.log(user);
       if (user) {
-        afAuth.idTokenResult.subscribe((data: IdTokenResult) => {
+        this.claimsSub = afAuth.idTokenResult.subscribe((data: IdTokenResult) => {
           console.log(data.claims);
           if (this.router.url.startsWith('/login')) {
             this.router.navigateByUrl('home');
@@ -31,20 +32,31 @@ export class AuthService {
           this.session = user;
         });
       } else {
-        router.navigateByUrl('login');
-        this.session = null;
+        storageService.get('hideLandingPage')
+          .then(async (hideLandingPage) => {
+            if (hideLandingPage) {
+              await router.navigateByUrl('login');
+            } else {
+              await router.navigateByUrl('landing');
+            }
+            this.session = null;
+          });
       }
     });
   }
 
   set session(user: User) {
     this.user = user;
-    this.$userRetrieved.next(!!user);
+    this.$userRetrieved.next(true);
   }
+
+  emailSignUp = (email: string, password: string) => this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+
+  emailSignIn = (email: string, password: string) => this.afAuth.auth.signInWithEmailAndPassword(email, password);
 
   googleSignIn = async () => {
     if (this.platform.is('capacitor')) {
-      Plugins.GoogleAuth.signIn()
+      return Plugins.GoogleAuth.signIn()
         .then(googleUser => {
           const oAuthCredential = auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
           this.afAuth.auth.signInWithCredential(oAuthCredential)
@@ -56,10 +68,10 @@ export class AuthService {
             })
             .catch(console.error);
         })
-        .catch();
+        .catch(console.error);
     } else {
       const provider = new auth.GoogleAuthProvider().setCustomParameters({ prompt: 'select_account' });
-      this.afAuth.auth.signInWithPopup(provider)
+      return this.afAuth.auth.signInWithPopup(provider)
         .then((credential) => {
           // console.log(credential.additionalUserInfo.isNewUser);
           // if (credential.additionalUserInfo.isNewUser) {
@@ -71,6 +83,7 @@ export class AuthService {
   }
 
   signOut = async () => {
+    this.claimsSub.unsubscribe();
     await this.storageService.remove('schoolYear');
     await this.afAuth.auth.signOut();
   }

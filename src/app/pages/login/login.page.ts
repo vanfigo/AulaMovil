@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
+import {StorageService} from '../../services/storage.service';
+import {NavController} from '@ionic/angular';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +11,22 @@ import {AuthService} from '../../services/auth.service';
 })
 export class LoginPage implements OnInit {
 
-  constructor(public authService: AuthService) { }
+  loading = false;
+
+  constructor(public authService: AuthService,
+              private storageService: StorageService,
+              private navController: NavController,
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() { }
+
+  googleSignIn = () => {
+    this.loading = true;
+    this.authService.googleSignIn()
+      .finally(() => this.loading = false);
+  }
+
+  showLandingPage = () => this.storageService.set('hideLandingPage', false)
+      .then(() => this.navController.navigateForward(['../landing'], { relativeTo: this.activatedRoute }))
 
 }
