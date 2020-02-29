@@ -22,12 +22,11 @@ export class AuthService {
               private platform: Platform,
               private storageService: StorageService) {
     afAuth.authState.subscribe(user => {
-      console.log(user);
       if (user) {
-        this.claimsSub = afAuth.idTokenResult.subscribe((data: IdTokenResult) => {
-          console.log(data.claims);
+        this.claimsSub = afAuth.idTokenResult.subscribe(async (data: IdTokenResult) => {
+          console.log('AuthService', data.claims);
           if (this.router.url.startsWith('/login')) {
-            this.router.navigateByUrl('home');
+            await this.router.navigate(['/home']);
           }
           this.session = user;
         });
@@ -87,4 +86,5 @@ export class AuthService {
     await this.storageService.remove('schoolYear');
     await this.afAuth.auth.signOut();
   }
+
 }

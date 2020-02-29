@@ -36,15 +36,21 @@ export class HomePage {
               private actionSheetController: ActionSheetController,
               private navController: NavController,
               private loadingController: LoadingController) {
-    storageService.get('schoolYear')
+  }
+
+  ionViewWillEnter() {
+    this.storageService.get('schoolYear')
       .then((schoolYear: any) => {
         if (schoolYear) {
           this.schoolYear = schoolYear;
           this.schoolYearSelect.value = schoolYear.name;
           this.findGroups();
+        } else {
+          this.schoolYear = null;
+          this.schoolYearSelect.value = '';
         }
       });
-  }
+}
 
   showAddSchoolYear = async () => {
     const options = [];
@@ -208,9 +214,7 @@ export class HomePage {
         text: 'Cancelar',
         role: 'cancel',
         icon: 'close',
-        handler: () => {
-          console.log('Cancelar clicked');
-        }
+        handler: () => { }
       }]
     }).then(actionSheet => actionSheet.present());
   }

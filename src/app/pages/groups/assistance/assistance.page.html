@@ -40,7 +40,7 @@
   </ion-list>
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button color="aula-movil" (click)="saveAssistance()"
-                    [disabled]="!datetime.value">
+                    [disabled]="students?.length === 0">
       <ion-icon name="save"></ion-icon>
     </ion-fab-button>
   </ion-fab>

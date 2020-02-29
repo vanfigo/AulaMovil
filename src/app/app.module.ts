@@ -13,6 +13,7 @@ import {environment} from '../environments/environment';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {DeactivateGuard} from './guards/deactivate.guard';
+import {AngularFireStorageModule} from '@angular/fire/storage';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +23,8 @@ import {DeactivateGuard} from './guards/deactivate.guard';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'aula-movil'),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AngularFireStorageModule
   ],
   providers: [
     StatusBar,
