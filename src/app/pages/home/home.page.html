@@ -1,11 +1,12 @@
 <ion-header>
   <ion-toolbar color="aula-movil">
-    <ion-buttons slot="end">
-      <ion-button (click)="authService.signOut()">Salir</ion-button>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="menuProfile"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<app-menu></app-menu>
+<ion-content id="home">
   <ion-list>
     <ion-list-header mode="ios">Cíclo Escolar</ion-list-header>
     <ion-item (click)="showAddSchoolYear()" button>

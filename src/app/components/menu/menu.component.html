@@ -1,0 +1,24 @@
+<ion-menu contentId="home" menuId="menuProfile">
+  <ion-header>
+    <ion-toolbar color="aula-movil">
+      <ion-chip slot="start" (click)="showProfilePage()">
+        <ion-avatar>
+          <img [src]="getProfileURL()" alt="">
+        </ion-avatar>
+        <ion-label color="light">{{getDisplayName()}}</ion-label>
+      </ion-chip>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button color="danger" (click)="menuController.close() && authService.signOut()">
+          <ion-icon name="log-out"></ion-icon>
+          <ion-label>Salir</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>
+</ion-menu>
