@@ -43,6 +43,8 @@ export class SignInComponent implements OnInit {
       .catch(error => {
         if (error.code === 'auth/invalid-email' || error.code === 'auth/wrong-password') {
           this.showErrorToast('El email o el password es incorrecto');
+        } else if (error.code === 'auth/user-not-found') {
+          this.showErrorToast('El usuario no esta registrado');
         }
       })
       .finally(() => this.loading = false);

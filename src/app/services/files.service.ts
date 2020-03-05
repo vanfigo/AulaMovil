@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Email} from '@teamhive/capacitor-email';
-import {AuthService} from './auth.service';
 import {LoadingController, ToastController} from '@ionic/angular';
 import {FileType} from '../models/file-type.class';
 import {FilesystemDirectory, FilesystemEncoding, GetUriResult, Plugins} from '@capacitor/core';
 import * as moment from 'moment';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 const {Filesystem} = Plugins;
 
@@ -16,7 +16,7 @@ export class FilesService {
   fileFormat = 'YYYY-MM-DD HH:mm:ss';
   rootFolder = 'Aula-Movil';
 
-  constructor(private authService: AuthService,
+  constructor(private afAuth: AngularFireAuth,
               private loadingController: LoadingController,
               private toastController: ToastController) { }
 
@@ -42,7 +42,7 @@ export class FilesService {
               });
               if (available.hasAccount) {
                 await email.open({
-                  to: [this.authService.user.email],
+                  to: [this.afAuth.auth.currentUser.email],
                   subject: fileType.name,
                   body: `${fileType.name} generado de manera automatica por Aula-Movil`,
                   isHtml: false,

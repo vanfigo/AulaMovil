@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, DocumentChangeAction, QueryDocumentSnapshot, QuerySnapshot} from '@angular/fire/firestore';
-import {AuthService} from './auth.service';
 import {GroupsService} from './groups.service';
 import {flatMap, map} from 'rxjs/operators';
 import {Activity} from '../models/activity.class';
 import * as firebase from 'firebase';
 import {PickerColumnOption} from '@ionic/core/dist/types/components/picker/picker-interface';
+import {AngularFireAuth} from '@angular/fire/auth';
 import Timestamp = firebase.firestore.Timestamp;
 
 @Injectable({
@@ -20,7 +20,7 @@ export class ActivitiesService {
   options: PickerColumnOption[] = [];
 
   constructor(private db: AngularFirestore,
-              private authService: AuthService,
+              private afAuth: AngularFireAuth,
               private groupsService: GroupsService) {
     for (let score = this.minScore; score <= this.maxScore; score++) {
       this.options.push({
@@ -30,7 +30,7 @@ export class ActivitiesService {
     }
   }
 
-  getDocumentGroup = () => this.db.collection('users').doc(this.authService.user.uid)
+  getDocumentGroup = () => this.db.collection('users').doc(this.afAuth.auth.currentUser.uid)
       .collection('groups').doc(this.groupsService.group.uid)
 
   getCollectionActivities = () => this.getDocumentGroup().collection(this.collectionName);

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, DocumentChangeAction} from '@angular/fire/firestore';
-import {AuthService} from './auth.service';
 import {GroupsService} from './groups.service';
 import {map} from 'rxjs/operators';
 import {Student} from '../models/student.class';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,11 @@ export class StudentsService {
   students: Student[];
 
   constructor(private db: AngularFirestore,
-              private authService: AuthService,
+              private afAuth: AngularFireAuth,
               private groupsService: GroupsService) { }
 
   getDocumentGroup = () =>
-    this.db.collection('users').doc(this.authService.user.uid)
+    this.db.collection('users').doc(this.afAuth.auth.currentUser.uid)
       .collection('groups').doc(this.groupsService.group.uid)
 
   getCollectionStudents = () => this.getDocumentGroup().collection(this.collectionName);

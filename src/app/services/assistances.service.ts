@@ -5,6 +5,7 @@ import {AuthService} from './auth.service';
 import {GroupsService} from './groups.service';
 import {Assistance} from '../models/assistance.class';
 import {map} from 'rxjs/operators';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,10 @@ export class AssistancesService {
 
   constructor(private db: AngularFirestore,
               private authService: AuthService,
+              private afAuth: AngularFireAuth,
               private groupsService: GroupsService) { }
 
-  getDocumentGroup = () => this.db.collection('users').doc(this.authService.user.uid)
+  getDocumentGroup = () => this.db.collection('users').doc(this.afAuth.auth.currentUser.uid)
     .collection('groups').doc(this.groupsService.group.uid)
 
   findByUid = (uid: string) => this.getDocumentGroup().collection(this.collectionName).doc(uid).get();

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {auth, User} from 'firebase';
+import {auth} from 'firebase';
 import {Router} from '@angular/router';
 import {ReplaySubject, Subscription} from 'rxjs';
 import {Plugins} from '@capacitor/core';
@@ -13,7 +13,6 @@ import IdTokenResult = firebase.auth.IdTokenResult;
 })
 export class AuthService {
 
-  public user: User;
   $userRetrieved = new ReplaySubject<boolean>(1);
   claimsSub = new Subscription();
 
@@ -28,7 +27,7 @@ export class AuthService {
           if (this.router.url.startsWith('/login')) {
             await this.router.navigate(['/home']);
           }
-          this.session = user;
+          this.$userRetrieved.next(true);
         });
       } else {
         storageService.get('hideLandingPage')
@@ -38,15 +37,10 @@ export class AuthService {
             } else {
               await router.navigateByUrl('landing');
             }
-            this.session = null;
+            this.$userRetrieved.next(true);
           });
       }
     });
-  }
-
-  set session(user: User) {
-    this.user = user;
-    this.$userRetrieved.next(true);
   }
 
   emailSignUp = (email: string, password: string) => this.afAuth.auth.createUserWithEmailAndPassword(email, password);
