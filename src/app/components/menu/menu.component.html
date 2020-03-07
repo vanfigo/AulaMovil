@@ -10,11 +10,17 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
+    <ion-list>
+      <ion-item detail button (click)="showSubscription()">
+        <ion-icon name="card" slot="start"></ion-icon>
+        <ion-label>Subscripción</ion-label>
+      </ion-item>
+    </ion-list>
   </ion-content>
   <ion-footer>
     <ion-toolbar>
       <ion-buttons slot="end">
-        <ion-button color="danger" (click)="menuController.close() && authService.signOut()">
+        <ion-button color="danger" (click)="signOut()">
           <ion-icon name="log-out"></ion-icon>
           <ion-label>Salir</ion-label>
         </ion-button>

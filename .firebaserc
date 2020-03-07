@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "aula-movil"
+  },
+  "targets": {
+    "aula-movil": {
+      "hosting": {
+        "app": [
+          "aula-movil"
+        ]
+      }
+    }
   }
 }

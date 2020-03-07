@@ -9,12 +9,14 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {AngularFireModule} from '@angular/fire';
-import {environment} from '../environments/environment';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
-import {DeactivateGuard} from './guards/deactivate.guard';
 import {AngularFireStorageModule} from '@angular/fire/storage';
+import {AngularFireFunctionsModule} from '@angular/fire/functions';
+import {environment} from '../environments/environment';
+import {DeactivateGuard} from './guards/deactivate.guard';
 
+// @ts-ignore
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -24,13 +26,14 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
     AngularFireModule.initializeApp(environment.firebaseConfig, 'aula-movil'),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    AngularFireFunctionsModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
     DeactivateGuard,
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   entryComponents: [],
   bootstrap: [AppComponent]

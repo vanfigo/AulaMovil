@@ -7,12 +7,12 @@ import {
   QueryDocumentSnapshot,
   QuerySnapshot
 } from '@angular/fire/firestore';
-import {AuthService} from './auth.service';
 import {map} from 'rxjs/operators';
 import {Group} from '../models/group.class';
 import {Assistance} from '../models/assistance.class';
 import {Activity} from '../models/activity.class';
 import {Student} from '../models/student.class';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Métodos de Pago</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <ion-list>
+    <ion-radio-group (ionChange)="selectPaymentMethod($event)">
+      <ion-item *ngFor="let paymentMethod of paymentMethods">
+        <ion-img [src]="getBrand(paymentMethod.brand)" slot="start"></ion-img>
+        <ion-label>{{paymentMethod.brand.toUpperCase()}} - {{paymentMethod.lastFour}}</ion-label>
+        <ion-chip>{{paymentMethod.expMonth}}/{{paymentMethod.expYear}}</ion-chip>
+        <ion-radio slot="end" [value]="paymentMethod.id" color="aula-movil"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="aula-movil" (click)="showAddPayment()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

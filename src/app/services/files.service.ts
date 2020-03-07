@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Email} from '@teamhive/capacitor-email';
-import {AuthService} from './auth.service';
 import {LoadingController, ToastController} from '@ionic/angular';
 import {FileType} from '../models/file-type.class';
 import {FilesystemDirectory, FilesystemEncoding, GetUriResult, Plugins} from '@capacitor/core';
 import * as moment from 'moment';
+import {AuthService} from './auth.service';
 
 const {Filesystem} = Plugins;
 
