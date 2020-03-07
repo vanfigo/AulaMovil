@@ -12,10 +12,11 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
-import {AngularFireFunctionsModule, FunctionsRegionToken} from '@angular/fire/functions';
+import {AngularFireFunctionsModule} from '@angular/fire/functions';
 import {environment} from '../environments/environment';
 import {DeactivateGuard} from './guards/deactivate.guard';
 
+// @ts-ignore
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -32,8 +33,7 @@ import {DeactivateGuard} from './guards/deactivate.guard';
     StatusBar,
     SplashScreen,
     DeactivateGuard,
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-    { provide: FunctionsRegionToken, useValue: 'us-central1' }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   entryComponents: [],
   bootstrap: [AppComponent]

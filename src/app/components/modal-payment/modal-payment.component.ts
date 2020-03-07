@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LoadingController, ModalController, ToastController} from '@ionic/angular';
 import {loadStripe, Stripe} from '@stripe/stripe-js';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-modal-payment',
@@ -14,7 +14,7 @@ export class ModalPaymentComponent implements OnInit {
   stripe: Stripe;
 
   constructor(public modalController: ModalController,
-              private afAuth: AngularFireAuth,
+              private authService: AuthService,
               private toastController: ToastController,
               private loadingController: LoadingController) { }
 
@@ -46,7 +46,7 @@ export class ModalPaymentComponent implements OnInit {
       this.stripe.createPaymentMethod({
         type: 'card', card,
         billing_details: {
-          email: this.afAuth.auth.currentUser.email
+          email: this.authService.user.email
         }
       }).then((result) => {
         loading.dismiss();

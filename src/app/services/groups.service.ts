@@ -12,7 +12,7 @@ import {Group} from '../models/group.class';
 import {Assistance} from '../models/assistance.class';
 import {Activity} from '../models/activity.class';
 import {Student} from '../models/student.class';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +23,12 @@ export class GroupsService {
   collectionName = 'groups';
 
   constructor(private db: AngularFirestore,
-              private afAuth: AngularFireAuth) {
+              private authService: AuthService) {
   }
 
-  getDocumentUser = () => this.db.collection('users').doc(this.afAuth.auth.currentUser.uid);
+  getDocumentUser = () => this.db.collection('users').doc(this.authService.user.uid);
 
-  getCollectionGroup = () => this.db.collection('users').doc(this.afAuth.auth.currentUser.uid).collection(this.collectionName);
+  getCollectionGroup = () => this.db.collection('users').doc(this.authService.user.uid).collection(this.collectionName);
 
   findByUid = (groupUid: string) => this.getCollectionGroup().doc(groupUid)
     .get().pipe(map((document: DocumentSnapshot<Group>) => {
@@ -54,21 +54,21 @@ export class GroupsService {
   delete = async (groupUid: string) => {
     const batch = this.db.firestore.batch();
     // delete assistance
-    const assistances: DocumentReference[] = await this.db.collection('users').doc(this.afAuth.auth.currentUser.uid)
+    const assistances: DocumentReference[] = await this.db.collection('users').doc(this.authService.user.uid)
       .collection('groups').doc(groupUid)
       .collection('assistance').get().pipe(map((snapshot: QuerySnapshot<Assistance>) =>
         snapshot.docs.map((document: QueryDocumentSnapshot<Assistance>) => document.ref)
       )).toPromise();
     assistances.forEach(assistance => batch.delete(assistance));
     // delete activities
-    const activities: DocumentReference[] = await this.db.collection('users').doc(this.afAuth.auth.currentUser.uid)
+    const activities: DocumentReference[] = await this.db.collection('users').doc(this.authService.user.uid)
       .collection('groups').doc(groupUid)
       .collection('activities').get().pipe(map((snapshot: QuerySnapshot<Activity>) =>
         snapshot.docs.map((document: QueryDocumentSnapshot<Activity>) => document.ref)
       )).toPromise();
     activities.forEach(activity => batch.delete(activity));
     // delete students
-    const students: DocumentReference[] = await this.db.collection('users').doc(this.afAuth.auth.currentUser.uid)
+    const students: DocumentReference[] = await this.db.collection('users').doc(this.authService.user.uid)
       .collection('groups').doc(groupUid)
       .collection('students').get().pipe(map((snapshot: QuerySnapshot<Student>) =>
         snapshot.docs.map((document: QueryDocumentSnapshot<Student>) => document.ref)

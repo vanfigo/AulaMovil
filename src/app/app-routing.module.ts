@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'group', loadChildren: () => import('./pages/groups/group.module').then(m => m.GroupModule) },
   { path: 'landing', loadChildren: () => import('./pages/landing/landing.module').then( m => m.LandingPageModule) },
   { path: 'profile', loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule) },
-  { path: 'membership', loadChildren: () => import('./pages/membership/membership.module').then( m => m.MembershipModule) },
+  { path: 'subscription', loadChildren: () => import('./pages/subscription/subscription.module').then(m => m.SubscriptionModule) },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 

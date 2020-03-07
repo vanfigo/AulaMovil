@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, DocumentChangeAction} from '@angular/fire/firestore';
-import {AngularFireAuth} from '@angular/fire/auth';
 import {map} from 'rxjs/operators';
 import {Payment} from '../models/payment.class';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +12,9 @@ export class PaymentService {
   collectionName = 'payments';
 
   constructor(private db: AngularFirestore,
-              private afAuth: AngularFireAuth) { }
+              private authService: AuthService) { }
 
-  getDocumentUser = () => this.db.collection('users').doc(this.afAuth.auth.currentUser.uid);
+  getDocumentUser = () => this.db.collection('users').doc(this.authService.user.uid);
 
   getCollection = () => this.getDocumentUser().collection(this.collectionName);
 

@@ -4,7 +4,7 @@ import {LoadingController, ToastController} from '@ionic/angular';
 import {FileType} from '../models/file-type.class';
 import {FilesystemDirectory, FilesystemEncoding, GetUriResult, Plugins} from '@capacitor/core';
 import * as moment from 'moment';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AuthService} from './auth.service';
 
 const {Filesystem} = Plugins;
 
@@ -16,7 +16,7 @@ export class FilesService {
   fileFormat = 'YYYY-MM-DD HH:mm:ss';
   rootFolder = 'Aula-Movil';
 
-  constructor(private afAuth: AngularFireAuth,
+  constructor(private authService: AuthService,
               private loadingController: LoadingController,
               private toastController: ToastController) { }
 
@@ -42,7 +42,7 @@ export class FilesService {
               });
               if (available.hasAccount) {
                 await email.open({
-                  to: [this.afAuth.auth.currentUser.email],
+                  to: [this.authService.user.email],
                   subject: fileType.name,
                   body: `${fileType.name} generado de manera automatica por Aula-Movil`,
                   isHtml: false,

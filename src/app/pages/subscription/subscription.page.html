@@ -31,7 +31,16 @@
           <ion-label>Un pago al año</ion-label>
         </ion-item>
       </ion-list>
-      <ion-button size="full" color="tertiary" class="ion-no-margin" (click)="createSubscription()">Pagar $200</ion-button>
+      <ion-button size="full" color="tertiary" *ngIf="subscription === undefined"
+                  class="ion-no-margin" (click)="createSubscription()">
+        <ion-spinner name="crescent" *ngIf="loading"></ion-spinner> Pagar $200
+      </ion-button>
+      <ion-button size="full" color="danger" *ngIf="showCancelSubscription()"
+                  class="ion-no-margin" (click)="cancelSubscription()">Cancelar Subscripción</ion-button>
+      <ion-button size="full" color="warning" *ngIf="showProblemsSubscription()"
+                  class="ion-no-margin" (click)="showPaymentsPage()">
+        <ion-label color="dark">Selecciona otro método de pago</ion-label>
+      </ion-button>
     </ion-card-content>
   </ion-card>
 

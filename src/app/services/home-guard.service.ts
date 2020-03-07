@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {AuthService} from './auth.service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
@@ -11,7 +10,6 @@ import {Observable} from 'rxjs';
 export class HomeGuardService implements CanActivate {
 
   constructor(private afAuth: AngularFireAuth,
-              private authService: AuthService,
               private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
