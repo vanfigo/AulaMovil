@@ -1,29 +1,37 @@
 <ion-content>
   <ion-slides [options]="slideOpts" pager="true">
     <ion-slide>
-      <ion-content class="ion-padding">
-        <ion-img src="https://via.placeholder.com/500x700/fff/2e86de"></ion-img>
-        <ion-button color="aula-movil" expand="block">About</ion-button>
-      </ion-content>
+      <ion-img src="https://via.placeholder.com/500x700/fff/2e86de"></ion-img>
     </ion-slide>
     <ion-slide>
-      <ion-content class="ion-padding">
-        <ion-img src="https://via.placeholder.com/500x700/fff/2e86de"></ion-img>
-        <ion-button color="aula-movil" expand="block">Roles</ion-button>
-      </ion-content>
+      <ion-img src="https://via.placeholder.com/500x700/fff/2e86de"></ion-img>
     </ion-slide>
     <ion-slide>
-      <ion-content>
-        <ion-img src="https://via.placeholder.com/500x700/fff/2e86de"></ion-img>
-        <ion-list class="ion-padding">
-          <ion-item lines="none">
-            <ion-checkbox slot="start" color="aula-movil" (ionChange)="updateViewLanding($event)"
-                          [(ngModel)]="hideLandingPage"></ion-checkbox>
-            <ion-label color="medium">No volver a mostrar esto</ion-label>
-          </ion-item>
-          <ion-button color="aula-movil" expand="block" (click)="navigateToLogin()">Ingresar</ion-button>
-        </ion-list>
-      </ion-content>
+      <ion-img src="https://via.placeholder.com/500x700/fff/2e86de"></ion-img>
+      <ion-item lines="none">
+        <ion-checkbox slot="start" color="aula-movil" (ionChange)="updateViewLanding($event)"
+                      [(ngModel)]="hideLandingPage"></ion-checkbox>
+        <ion-label color="medium">No volver a mostrar esto</ion-label>
+      </ion-item>
     </ion-slide>
   </ion-slides>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="showBack">
+      <ion-button color="aula-movil" (click)="slides.slidePrev()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        <ion-label>Atras</ion-label>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="aula-movil" *ngIf="showForward" (click)="slides.slideNext()">
+        <ion-label>Siguiente</ion-label>
+        <ion-icon name="arrow-forward" slot="end"></ion-icon>
+      </ion-button>
+      <ion-button color="aula-movil" fill="solid" *ngIf="showLogIn" (click)="navigateToLogin()">
+        <ion-label>Ingresar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
