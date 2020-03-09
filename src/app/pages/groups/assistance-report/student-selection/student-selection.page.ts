@@ -111,7 +111,10 @@ export class StudentSelectionPage implements OnInit {
         }
       });
       fields.push('Total de Faltas');
-      this.filesService.generateAndShareFile(new FileType('Reporte de Asistencias', 'csv'), papa.unparse({data, fields}));
+      this.filesService.generateAndShareFile(
+        new FileType('Reporte de Asistencias', 'csv'),
+        papa.unparse({data, fields})
+      );
     });
   }
 
