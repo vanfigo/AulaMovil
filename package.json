@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~9.0.1",
     "@angular/platform-browser-dynamic": "~9.0.1",
     "@angular/router": "~9.0.1",
+    "@byteowls/capacitor-filesharer": "^1.0.1",
     "@capacitor/android": "^1.5.0",
     "@capacitor/core": "^1.5.0",
     "@codetrix-studio/capacitor-google-auth": "^1.5.0",
@@ -28,15 +29,14 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^5.0.0",
     "@stripe/stripe-js": "^1.0.2",
-    "@teamhive/capacitor-email": "^2.1.2",
     "@types/papaparse": "^5.0.3",
     "core-js": "^2.5.4",
+    "firebase": "^7.8.0",
     "moment": "^2.24.0",
     "papaparse": "^5.1.1",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
-    "zone.js": "~0.10.2",
-    "firebase": "^7.8.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.900.1",

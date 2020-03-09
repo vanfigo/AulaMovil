@@ -67,8 +67,6 @@ export class StudentSelectionPage implements OnInit {
   createActivitiesReport = () => {
     const data: any[][] = [];
     const fields: string[] = Array('Nombre del Alumno');
-    console.table(this.activities);
-    console.table(this.students);
     this.students.forEach((student: Student, studentIndex: number) => {
       data[studentIndex] = [`${student.displayName} ${student.displayLastName}`, 0];
       this.activities.forEach((activity: Activity, activityIndex: number) => {
@@ -89,8 +87,10 @@ export class StudentSelectionPage implements OnInit {
       const activitiesSize = this.activities.length;
       columns[activitiesSize + 1] = (columns[activitiesSize + 1] / activitiesSize).toFixed(2);
     });
-    console.log(papa.unparse({data, fields}));
-    this.filesService.generateAndShareFile(new FileType('Reporte de Actividades', 'csv'), papa.unparse({data, fields}));
+    this.filesService.generateAndShareFile(
+      new FileType('Reporte de Actividades', 'csv'),
+      papa.unparse({data, fields})
+    );
   }
 
 }
