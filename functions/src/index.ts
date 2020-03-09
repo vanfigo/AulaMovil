@@ -122,3 +122,27 @@ exports.updateActivitiesTotal = functions.firestore.document('users/{userUid}/gr
     }
     return null;
   });
+
+exports.updateActivityStatus = functions.firestore.document('users/{userUid}/groups/{groupUid}/activities/{activityUid}')
+  .onUpdate((change, context) => {
+    // @ts-ignore
+    const {grades} = change.after.data();
+    const activityRef = change.after.ref;
+    const groupRef = activityRef.parent.parent;
+    return groupRef?.get()
+      .then((groupSnapshot) => {
+        // @ts-ignore
+        const {students} = groupSnapshot.data();
+        let status = 0;
+        if (students > 0) {
+          if (students === grades.length) {
+            status = 2;
+          } else if (grades.length > 0) {
+            status = 1;
+          }
+          return activityRef.update({status}).catch(console.error);
+        }
+        return null;
+      })
+      .catch(console.error);
+  });

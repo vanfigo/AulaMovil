@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import {Grade} from './grade.class';
+import {ActivityStatus} from './activity-status.enum';
 import Timestamp = firebase.firestore.Timestamp;
 
 export class Activity {
@@ -9,14 +10,14 @@ export class Activity {
   grades: Grade[];
   dueDate: Date | Timestamp;
   creationDate: Date | Timestamp;
-  isSaved: boolean;
+  status: ActivityStatus;
 
   constructor(name: string, dueDate: Date | Timestamp) {
     this.name = name;
     this.dueDate = dueDate;
     this.creationDate = new Date();
     this.grades = [];
-    this.isSaved = false;
+    this.status = ActivityStatus.CREATED;
   }
 
 }
