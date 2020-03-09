@@ -40,24 +40,6 @@ export class ModalGradesComponent implements OnInit {
       });
   }
 
-  saveGrades = () => {
-    const grades: Grade[] = [];
-    Object.entries(this.scoreFormGroup.value).forEach((controlValue: [string, number]) =>
-      grades.push({...new Grade(controlValue[0], controlValue[1])}));
-    this.activity.grades = grades;
-    this.activity.isSaved = true;
-    this.activitiesService.update(this.activity)
-      .then(() => this.toastController.create({
-        message: `Las calificaciones para la <strong>Actividad ${this.activity.position}: ` +
-          `${this.activity.name ? this.activity.name : 'Sin nombre'}</strong> han sido actualizadas`,
-        duration: 3000
-      }).then(toast => {
-        toast.present();
-        this.modalController.dismiss();
-      })
-    );
-  }
-
   filterStudents = (event: CustomEvent) => {
     const filterValue: string = event.detail.value.toLowerCase();
     if (filterValue.length > 0) {
@@ -68,7 +50,7 @@ export class ModalGradesComponent implements OnInit {
   }
 
   showScorePicker = async (student: Student) => {
-    const picker = await this.pickerController.create({
+    this.pickerController.create({
       columns: [{
         name: 'score',
         options: this.activitiesService.options
@@ -81,10 +63,25 @@ export class ModalGradesComponent implements OnInit {
         handler: (value) => {
           const score: number = value.score.value;
           this.scoreFormGroup.get(student.uid).setValue(score);
+          if (this.activity.grades.find(storedGrade => storedGrade.studentUid === student.uid)) {
+            this.activity.grades = this.activity.grades.map(storedGrade => {
+              if (storedGrade.studentUid === student.uid) {
+                storedGrade.score = score;
+              }
+              return storedGrade;
+            });
+          } else {
+            this.activity.grades.push({...new Grade(student.uid, score)});
+          }
+          this.activitiesService.update(this.activity)
+            .then(() => this.toastController.create({
+                message: 'La calificacion ha sido guardada exitosamente',
+                duration: 3000
+              }).then(toast => toast.present())
+            );
         }
       }]
-    });
-    await picker.present();
+    }).then(picker => picker.present());
   }
 
 }
