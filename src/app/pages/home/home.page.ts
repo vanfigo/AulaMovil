@@ -6,6 +6,7 @@ import {
   AlertController,
   IonInput,
   LoadingController,
+  ModalController,
   NavController,
   PickerController,
   ToastController
@@ -15,14 +16,15 @@ import * as moment from 'moment';
 import {Group} from '../../models/group.class';
 import {GroupsService} from '../../services/groups.service';
 import {SubscriptionsService} from '../../services/subscriptions.service';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
+import {DeactivatableComponent} from '../../interfaces/deactivable-component.interface';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements DeactivatableComponent {
 
   groups: Group[];
   schoolYear: SchoolYear;
@@ -41,7 +43,18 @@ export class HomePage {
               private actionSheetController: ActionSheetController,
               private navController: NavController,
               private loadingController: LoadingController,
-              public subscriptionsService: SubscriptionsService) { }
+              public subscriptionsService: SubscriptionsService,
+              private modalController: ModalController) { }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.modalController.getTop()
+      .then((top: HTMLElement | undefined) => {
+        if (top) {
+          this.modalController.dismiss();
+        }
+        return top === undefined;
+      });
+  }
 
   ionViewWillEnter() {
     this.subscriptionSub = this.subscriptionsService.getActive().subscribe((subscription) => {
