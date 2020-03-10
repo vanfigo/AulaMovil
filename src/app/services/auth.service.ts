@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {auth, User} from 'firebase';
 import {Router} from '@angular/router';
-import {ReplaySubject, Subscription} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {Plugins} from '@capacitor/core';
-import {Platform} from '@ionic/angular';
+import {ModalController, Platform} from '@ionic/angular';
 import {StorageService} from './storage.service';
-import IdTokenResult = firebase.auth.IdTokenResult;
+import {AboutComponent} from '../components/about/about.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,31 +15,36 @@ export class AuthService {
 
   user: User;
   $userRetrieved = new ReplaySubject<boolean>(1);
-  claimsSub = new Subscription();
 
   constructor(private afAuth: AngularFireAuth,
               private router: Router,
               private platform: Platform,
-              private storageService: StorageService) {
+              private storageService: StorageService,
+              private modalController: ModalController) {
     afAuth.authState.subscribe(user => {
       this.user = user;
       if (user) {
-        this.claimsSub = afAuth.idTokenResult.subscribe(async (data: IdTokenResult) => {
-          console.log('AuthService', data.claims);
           if (this.router.url.startsWith('/login')) {
-            await this.router.navigate(['/home']);
+            this.router.navigate(['/home'])
+              .then(() => this.$userRetrieved.next(true));
+          } else {
+            this.$userRetrieved.next(true);
           }
-          this.$userRetrieved.next(true);
-        });
       } else {
         storageService.get('hideLandingPage')
           .then(async (hideLandingPage) => {
-            if (hideLandingPage) {
-              await router.navigateByUrl('login');
-            } else {
-              await router.navigateByUrl('landing');
-            }
-            this.$userRetrieved.next(true);
+            router.navigateByUrl('login').then(() => {
+              if (!hideLandingPage) {
+                this.modalController.create({
+                  component: AboutComponent
+                }).then(async modal => {
+                  await modal.present();
+                  this.$userRetrieved.next(true);
+                });
+              } else {
+                this.$userRetrieved.next(true);
+              }
+            });
           });
       }
     });
@@ -78,7 +83,6 @@ export class AuthService {
   }
 
   signOut = async () => {
-    this.claimsSub.unsubscribe();
     await this.storageService.remove('schoolYear');
     await this.afAuth.signOut();
   }

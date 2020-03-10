@@ -1,5 +1,5 @@
 ion-slides {
-  --bullet-background-active: var(--ion-color-aula-movil);
+  --bullet-background-active: var(--ion-color-light);
 }
 
 .swiper-container {
@@ -10,7 +10,7 @@ ion-slides {
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
+  --background-color: var(--ion-color-aula-movil);
 
   /* Center slide text vertically */
   display: -webkit-box;

@@ -10,10 +10,19 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ion-list>
+    <ion-list lines="none">
       <ion-item detail button (click)="showSubscription()">
         <ion-icon name="card" slot="start"></ion-icon>
         <ion-label>Subscripción</ion-label>
+      </ion-item>
+      <ion-item-divider></ion-item-divider>
+      <ion-item button detail>
+        <ion-icon name="help-buoy" slot="start"></ion-icon>
+        <ion-label>Ayuda y comentarios</ion-label>
+      </ion-item>
+      <ion-item button (click)="showAboutComponent()">
+        <ion-icon name="information" slot="start"></ion-icon>
+        <ion-label>Acerca de Aula Movil</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>

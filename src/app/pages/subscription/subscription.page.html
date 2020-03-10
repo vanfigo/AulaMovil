@@ -11,7 +11,7 @@
     <ion-card-header class="ion-text-center" color="tertiary">
       <ion-card-title>Membresia Anual</ion-card-title>
     </ion-card-header>
-    <ion-img src="https://via.placeholder.com/400x200/7044ff/fff"></ion-img>
+    <ion-img src="https://i.pinimg.com/564x/d6/21/dd/d621dd7b454d5fdda40c4cd70245c994.jpg"></ion-img>
     <ion-card-content class="ion-no-padding">
       <ion-list lines="full">
         <ion-item>
@@ -33,7 +33,8 @@
       </ion-list>
       <ion-button size="full" color="tertiary" *ngIf="subscription === undefined"
                   class="ion-no-margin" (click)="createSubscription()">
-        <ion-spinner name="crescent" *ngIf="loading"></ion-spinner> Pagar $200
+        <ion-spinner name="crescent" *ngIf="loading"></ion-spinner>
+        <ion-label class="ion-margin-horizontal">Pagar $200</ion-label>
       </ion-button>
       <ion-button size="full" color="danger" *ngIf="showCancelSubscription()"
                   class="ion-no-margin" (click)="cancelSubscription()">Cancelar Subscripción</ion-button>

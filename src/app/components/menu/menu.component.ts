@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {MenuController, ModalController, NavController} from '@ionic/angular';
 import {ActivatedRoute} from '@angular/router';
+import {AboutComponent} from '../about/about.component';
 
 @Component({
   selector: 'app-menu',
@@ -18,11 +19,11 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {}
 
-  getProfileURL = () => this.authService.user.photoURL ?
+  getProfileURL = () => (this.authService.user && this.authService.user.photoURL) ?
     this.authService.user.photoURL : 'https://img.icons8.com/cotton/gender-neutral-user--v1'
 
-  getDisplayName = () => this.authService.user.displayName ?
-    this.authService.user.displayName : this.authService.user.email
+  getDisplayName = () => this.authService.user ? (this.authService.user.displayName ?
+    this.authService.user.displayName : this.authService.user.email) : ''
 
   showProfilePage = () => {
     this.navController.navigateForward(['../profile'], { relativeTo: this.activatedRoute })
@@ -33,6 +34,10 @@ export class MenuComponent implements OnInit {
     this.navController.navigateForward(['../subscription'], { relativeTo: this.activatedRoute })
       .then(() => this.menuController.close());
   }
+
+  showAboutComponent = () => this.modalController.create({
+    component: AboutComponent
+  }).then(modal => this.menuController.close().then(() => modal.present()))
 
   signOut = () => this.menuController.close().then(this.authService.signOut);
 

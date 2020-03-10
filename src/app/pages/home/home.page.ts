@@ -14,6 +14,8 @@ import {StorageService} from '../../services/storage.service';
 import * as moment from 'moment';
 import {Group} from '../../models/group.class';
 import {GroupsService} from '../../services/groups.service';
+import {SubscriptionsService} from '../../services/subscriptions.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -24,8 +26,11 @@ export class HomePage {
 
   groups: Group[];
   schoolYear: SchoolYear;
-  loading = false;
-  @ViewChild(IonInput) schoolYearSelect: IonInput;
+  subscriptionSub = new Subscription();
+  hasActiveSubscription = true;
+  groupLoading = false;
+  loading = true;
+  @ViewChild(IonInput, {static: true}) schoolYearSelect: IonInput;
 
   constructor(public authService: AuthService,
               private pickerController: PickerController,
@@ -35,12 +40,26 @@ export class HomePage {
               private groupsService: GroupsService,
               private actionSheetController: ActionSheetController,
               private navController: NavController,
-              private loadingController: LoadingController) {
-  }
+              private loadingController: LoadingController,
+              public subscriptionsService: SubscriptionsService) { }
 
   ionViewWillEnter() {
+    this.subscriptionSub = this.subscriptionsService.getActive().subscribe((subscription) => {
+      this.hasActiveSubscription = !!subscription;
+      if (this.hasActiveSubscription) {
+        this.selectSchoolYear();
+      }
+      this.loading = false;
+    });
+  }
+
+  ionViewDidLeave() {
+    this.subscriptionSub.unsubscribe();
+  }
+
+  selectSchoolYear = () => {
     this.storageService.get('schoolYear')
-      .then((schoolYear: any) => {
+      .then(async (schoolYear: any) => {
         if (schoolYear) {
           this.schoolYear = schoolYear;
           this.schoolYearSelect.value = schoolYear.name;
@@ -50,7 +69,7 @@ export class HomePage {
           this.schoolYearSelect.value = '';
         }
       });
-}
+  }
 
   showAddSchoolYear = async () => {
     const options = [];
@@ -84,12 +103,12 @@ export class HomePage {
   }
 
   findGroups = () => {
-    this.loading = true;
+    this.groupLoading = true;
     this.groups = [];
     this.groupsService.findAllBySchoolYearUid(this.schoolYear.uid)
       .subscribe(groups => {
         this.groups = groups;
-        this.loading = false;
+        this.groupLoading = false;
       });
   }
 
@@ -109,6 +128,7 @@ export class HomePage {
         text: 'Agregar',
         handler: (value) => {
           const group: Group = new Group(value.groupName, this.schoolYear.uid);
+          this.groupLoading = true;
           this.groupsService.save(group)
             .then(() => {
               this.toastController.create({
@@ -218,5 +238,7 @@ export class HomePage {
       }]
     }).then(actionSheet => actionSheet.present());
   }
+
+  showSubscriptionPage = () => this.navController.navigateForward(['/subscription']);
 
 }

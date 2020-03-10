@@ -10,6 +10,7 @@ import {map} from 'rxjs/operators';
 export class SubscriptionsService {
 
   collectionName = 'subscriptions';
+  hasActiveSubscription: boolean;
 
   constructor(private db: AngularFirestore,
               private authService: AuthService) { }
