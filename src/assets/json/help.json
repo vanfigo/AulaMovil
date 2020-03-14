@@ -1,0 +1,32 @@
+[
+  {
+    "icon": "people-circle",
+    "name": "Groups",
+    "path": "group"
+  },
+  {
+    "icon": "person",
+    "name": "Alumnos",
+    "path": "student"
+  },
+  {
+    "icon": "bookmarks",
+    "name": "Actividades",
+    "path": "activity"
+  },
+  {
+    "icon": "checkmark-circle",
+    "name": "Asistencias",
+    "path": "assistance"
+  },
+  {
+    "icon": "school",
+    "name": "Reporte de Actividades",
+    "path": "activitiesReport"
+  },
+  {
+    "icon": "checkmark-done-circle",
+    "name": "Reporte de Asistencias",
+    "path": "assistancesReport"
+  }
+]

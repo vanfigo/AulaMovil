@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'group', loadChildren: () => import('./pages/groups/group.module').then(m => m.GroupModule) },
   { path: 'profile', loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule) },
   { path: 'subscription', loadChildren: () => import('./pages/subscription/subscription.module').then(m => m.SubscriptionModule) },
+  { path: 'help', loadChildren: () => import('./pages/help/help.module').then( m => m.HelpPageModule) },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 

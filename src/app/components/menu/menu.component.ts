@@ -37,7 +37,10 @@ export class MenuComponent implements OnInit {
 
   showAboutComponent = () => this.modalController.create({
     component: AboutComponent
-  }).then(modal => this.menuController.close().then(() => modal.present()))
+  }).then(modal => modal.present().then(() => this.menuController.close()))
+
+  showHelpPage = () => this.navController.navigateForward(['../help'], { relativeTo: this.activatedRoute })
+    .then(() => this.menuController.close())
 
   signOut = () => this.menuController.close().then(this.authService.signOut);
 
