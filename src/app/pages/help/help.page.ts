@@ -12,9 +12,7 @@ export class HelpPage implements OnInit {
 
   data: HelpEntry[] = helpMenu;
 
-  constructor() {
-    console.log(this.data);
-  }
+  constructor() { }
 
   ngOnInit() {
   }

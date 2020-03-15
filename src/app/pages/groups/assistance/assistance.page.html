@@ -4,6 +4,11 @@
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Asistencia</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['summary']">
+        <ion-icon slot="icon-only" name="bar-chart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
