@@ -6,6 +6,7 @@ import {AssistancesService} from '../../../../services/assistances.service';
 import * as moment from 'moment';
 import {Assistance} from '../../../../models/assistance.class';
 import {Plugins} from '@capacitor/core';
+import {GroupsService} from '../../../../services/groups.service';
 
 const { Clipboard } = Plugins;
 
@@ -52,7 +53,8 @@ export class SummaryPage {
   barChartData: ChartDataSets[] = [{}];
 
   constructor(private assistancesService: AssistancesService,
-              private toastController: ToastController) {
+              private toastController: ToastController,
+              private groupsService: GroupsService) {
   }
 
   ionViewDidEnter() {
@@ -100,7 +102,7 @@ export class SummaryPage {
 
   copyCurrentAssistances = () => {
     console.log(this.assistances);
-    const description = 'Asistencias:' + this.assistances.map(assistance => {
+    const description = `Inasistencias Grupo ${this.groupsService.group.name}:` + this.assistances.map(assistance => {
       const date = '\r\n' + moment(assistance.uid).locale('es').format('dddd DD [de] MMMM, YYYY') + '\r\n';
       const students = assistance.students.map(student => `${student.displayName} ${student.displayLastName}`);
       return date + students.join('\r\n');

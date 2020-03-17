@@ -26,9 +26,10 @@
     <ion-item>
       <ion-note slot="end" class="ion-text-end">Falta</ion-note>
     </ion-item>
+    <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
     <ion-item *ngFor="let assistanceCard of assistanceCards">
       <ion-label>{{assistanceCard.date | date: 'mediumDate'}}</ion-label>
-      <ion-checkbox slot="end" [(ngModel)]="assistanceCard.notAssisted"
+      <ion-checkbox slot="end" [name]="assistanceCard.assistanceUid"
                     (ionChange)="saveAssistance(assistanceCard, $event)"></ion-checkbox>
     </ion-item>
   </ion-list>
