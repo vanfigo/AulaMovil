@@ -1,0 +1,41 @@
+<ion-content color="aula-movil">
+  <ion-slides pager="true">
+    <ion-slide class="ion-padding">
+      <ion-img src="https://assets-ouch.icons8.com/preview/915/7fd4e1f8-2ab1-4ce1-a628-165821a82e03.png"></ion-img>
+      <ion-text>
+        <h1><strong>Aula Móvil</strong> te permite generar grupos para organizar a tus alumnos</h1>
+      </ion-text>
+    </ion-slide>
+    <ion-slide class="ion-padding">
+      <ion-img src="https://assets-ouch.icons8.com/thumb/820/d4f96af2-07e0-4728-a3f1-7c65b38a9fdc.png"></ion-img>
+      <ion-text>
+        <h1>Pasa asistencia y califica actividades, todo en un solo lugar</h1>
+      </ion-text>
+    </ion-slide>
+    <ion-slide class="ion-padding">
+      <ion-img src="https://assets-ouch.icons8.com/thumb/277/9d9d3a09-05c1-4a30-97ae-1b831d4bbca8.png"></ion-img>
+      <ion-text>
+        <h1>Genera reportes y guárdalos donde quieras, para tu comodidad</h1>
+      </ion-text>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+<ion-footer>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start" *ngIf="showSkip">
+      <ion-button color="aula-movil" (click)="dismissAboutComponent()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        <ion-label color="light">Saltar</ion-label>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="aula-movil" *ngIf="showForward" (click)="slides.slideNext()">
+        <ion-label color="light">Siguiente</ion-label>
+        <ion-icon name="arrow-forward" slot="end" color="light"></ion-icon>
+      </ion-button>
+      <ion-button color="aula-movil" fill="solid" *ngIf="showDone" (click)="dismissAboutComponent()">
+        <ion-label>Finalizar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

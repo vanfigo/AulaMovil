@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Resumen de asistencias</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-toolbar>
+    <ion-segment (ionChange)="showAssistance($event)">
+      <ion-segment-button value="last">
+        <ion-label>Último Día</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="3daysBack">
+        <ion-label>3 días</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="5daysBack">
+        <ion-label>5 días</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <canvas baseChart
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [legend]="barChartLegend"
+          [colors]="barChartColors"
+          chartType="bar">
+  </canvas>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="aula-movil" (click)="copyCurrentAssistances()">
+      <ion-icon name="copy"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

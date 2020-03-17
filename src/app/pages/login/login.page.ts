@@ -26,7 +26,4 @@ export class LoginPage implements OnInit {
       .finally(() => this.loading = false);
   }
 
-  showLandingPage = () => this.storageService.set('hideLandingPage', false)
-      .then(() => this.navController.navigateForward(['../landing'], { relativeTo: this.activatedRoute }))
-
 }

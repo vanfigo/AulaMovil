@@ -32,6 +32,13 @@ export class AssistancesService {
       return {...assistance};
     })))
 
+  findInDatesArray = (dates: string[]) => this.getDocumentGroup()
+    .collection(this.collectionName, ref => ref.where('uid', 'in', dates))
+    .get().pipe(map((snapshot: QuerySnapshot<Assistance>) => snapshot.docs.map((document: QueryDocumentSnapshot<Assistance>) => {
+      const assistance = document.data();
+      return {...assistance};
+    })))
+
   save = (assistance: Assistance) => this.getDocumentGroup() .collection(this.collectionName)
     .doc(assistance.uid).set({...assistance})
 

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, DocumentChangeAction} from '@angular/fire/firestore';
-import {AuthService} from './auth.service';
 import {GroupsService} from './groups.service';
 import {map} from 'rxjs/operators';
 import {Student} from '../models/student.class';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'

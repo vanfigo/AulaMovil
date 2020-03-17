@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" color="light">
+  <ion-card>
+    <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+    <ion-card-header>
+      <ion-avatar class="ion-margin-end" (click)="photoInput.click()">
+        <ion-img [src]="getProfileURL()" alt="profile photo"></ion-img>
+      </ion-avatar>
+      <input hidden type="file" #photoInput (change)="updatePhoto(photoInput)"/>
+      <div>
+        <ion-card-title>{{getDisplayName()}}</ion-card-title>
+        <ion-card-subtitle>{{authService.user.email}}</ion-card-subtitle>
+      </div>
+    </ion-card-header>
+    <ion-card-content class="ion-no-padding">
+      <ion-list [formGroup]="profileFormGroup" lines="full">
+        <ion-item class="ion-text-end">
+          <ion-label slot="start">Nombre</ion-label>
+          <ion-input placeholder="Nombre" formControlName="displayName"></ion-input>
+        </ion-item>
+        <ion-item class="ion-text-end">
+          <ion-label slot="start">Correo</ion-label>
+          <ion-input readonly [value]="authService.user.email"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!authService.user.emailVerified">
+          <ion-label slot="start">Correo sin verificar</ion-label>
+          <ion-button slot="end" fill="clear" (click)="verifyEmail()">Enviar Correo</ion-button>
+        </ion-item>
+        <ion-item *ngIf="authService.user.emailVerified">
+          <ion-label slot="start">Correo verificado</ion-label>
+          <ion-icon slot="end" name="checkmark" color="success"></ion-icon>
+        </ion-item>
+      </ion-list>
+      <ion-button expand="block" color="aula-movil" class="ion-margin" (click)="saveProfile()">Guardar</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

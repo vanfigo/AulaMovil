@@ -6,7 +6,7 @@ export class Student {
   name: string;
   displayName: string;
   lastName: string;
-  displayLastName; string;
+  displayLastName: string;
   listNumber?: number;
   creationDate: Date | Timestamp;
 

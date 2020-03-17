@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, DocumentChangeAction, QueryDocumentSnapshot, QuerySnapshot} from '@angular/fire/firestore';
-import {AuthService} from './auth.service';
 import {GroupsService} from './groups.service';
 import {flatMap, map} from 'rxjs/operators';
 import {Activity} from '../models/activity.class';
 import * as firebase from 'firebase';
 import {PickerColumnOption} from '@ionic/core/dist/types/components/picker/picker-interface';
+import {AuthService} from './auth.service';
 import Timestamp = firebase.firestore.Timestamp;
 
 @Injectable({

@@ -2,64 +2,64 @@ import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {auth, User} from 'firebase';
 import {Router} from '@angular/router';
-import {ReplaySubject, Subscription} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {Plugins} from '@capacitor/core';
-import {Platform} from '@ionic/angular';
+import {ModalController, Platform} from '@ionic/angular';
 import {StorageService} from './storage.service';
-import IdTokenResult = firebase.auth.IdTokenResult;
+import {AboutComponent} from '../components/about/about.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  public user: User;
+  user: User;
   $userRetrieved = new ReplaySubject<boolean>(1);
-  claimsSub = new Subscription();
 
   constructor(private afAuth: AngularFireAuth,
               private router: Router,
               private platform: Platform,
-              private storageService: StorageService) {
+              private storageService: StorageService,
+              private modalController: ModalController) {
     afAuth.authState.subscribe(user => {
-      console.log(user);
+      this.user = user;
       if (user) {
-        this.claimsSub = afAuth.idTokenResult.subscribe((data: IdTokenResult) => {
-          console.log(data.claims);
           if (this.router.url.startsWith('/login')) {
-            this.router.navigateByUrl('home');
+            this.router.navigate(['/home'])
+              .then(() => this.$userRetrieved.next(true));
+          } else {
+            this.$userRetrieved.next(true);
           }
-          this.session = user;
-        });
       } else {
         storageService.get('hideLandingPage')
           .then(async (hideLandingPage) => {
-            if (hideLandingPage) {
-              await router.navigateByUrl('login');
-            } else {
-              await router.navigateByUrl('landing');
-            }
-            this.session = null;
+            router.navigateByUrl('login').then(() => {
+              if (!hideLandingPage) {
+                this.modalController.create({
+                  component: AboutComponent
+                }).then(async modal => {
+                  await modal.present();
+                  this.$userRetrieved.next(true);
+                });
+              } else {
+                this.$userRetrieved.next(true);
+              }
+            });
           });
       }
     });
   }
 
-  set session(user: User) {
-    this.user = user;
-    this.$userRetrieved.next(true);
-  }
+  emailSignUp = (email: string, password: string) => this.afAuth.createUserWithEmailAndPassword(email, password);
 
-  emailSignUp = (email: string, password: string) => this.afAuth.auth.createUserWithEmailAndPassword(email, password);
-
-  emailSignIn = (email: string, password: string) => this.afAuth.auth.signInWithEmailAndPassword(email, password);
+  emailSignIn = (email: string, password: string) => this.afAuth.signInWithEmailAndPassword(email, password);
 
   googleSignIn = async () => {
     if (this.platform.is('capacitor')) {
       return Plugins.GoogleAuth.signIn()
         .then(googleUser => {
           const oAuthCredential = auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
-          this.afAuth.auth.signInWithCredential(oAuthCredential)
+          this.afAuth.signInWithCredential(oAuthCredential)
             .then((credential) => {
               // console.log(credential.additionalUserInfo.isNewUser);
               // if (credential.additionalUserInfo.isNewUser) {
@@ -71,7 +71,7 @@ export class AuthService {
         .catch(console.error);
     } else {
       const provider = new auth.GoogleAuthProvider().setCustomParameters({ prompt: 'select_account' });
-      return this.afAuth.auth.signInWithPopup(provider)
+      return this.afAuth.signInWithPopup(provider)
         .then((credential) => {
           // console.log(credential.additionalUserInfo.isNewUser);
           // if (credential.additionalUserInfo.isNewUser) {
@@ -83,8 +83,8 @@ export class AuthService {
   }
 
   signOut = async () => {
-    this.claimsSub.unsubscribe();
     await this.storageService.remove('schoolYear');
-    await this.afAuth.auth.signOut();
+    await this.afAuth.signOut();
   }
+
 }

@@ -6,6 +6,7 @@ import {
   AlertController,
   IonInput,
   LoadingController,
+  ModalController,
   NavController,
   PickerController,
   ToastController
@@ -14,18 +15,24 @@ import {StorageService} from '../../services/storage.service';
 import * as moment from 'moment';
 import {Group} from '../../models/group.class';
 import {GroupsService} from '../../services/groups.service';
+import {SubscriptionsService} from '../../services/subscriptions.service';
+import {Observable, Subscription} from 'rxjs';
+import {DeactivatableComponent} from '../../interfaces/deactivable-component.interface';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements DeactivatableComponent {
 
   groups: Group[];
   schoolYear: SchoolYear;
-  loading = false;
-  @ViewChild(IonInput) schoolYearSelect: IonInput;
+  subscriptionSub = new Subscription();
+  hasActiveSubscription = true;
+  groupLoading = false;
+  loading = true;
+  @ViewChild(IonInput, {static: true}) schoolYearSelect: IonInput;
 
   constructor(public authService: AuthService,
               private pickerController: PickerController,
@@ -35,13 +42,44 @@ export class HomePage {
               private groupsService: GroupsService,
               private actionSheetController: ActionSheetController,
               private navController: NavController,
-              private loadingController: LoadingController) {
-    storageService.get('schoolYear')
-      .then((schoolYear: any) => {
+              private loadingController: LoadingController,
+              public subscriptionsService: SubscriptionsService,
+              private modalController: ModalController) { }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.modalController.getTop()
+      .then((top: HTMLElement | undefined) => {
+        if (top) {
+          this.modalController.dismiss();
+        }
+        return top === undefined;
+      });
+  }
+
+  ionViewWillEnter() {
+    this.subscriptionSub = this.subscriptionsService.getActive().subscribe((subscription) => {
+      this.hasActiveSubscription = !!subscription;
+      if (this.hasActiveSubscription) {
+        this.selectSchoolYear();
+      }
+      this.loading = false;
+    });
+  }
+
+  ionViewDidLeave() {
+    this.subscriptionSub.unsubscribe();
+  }
+
+  selectSchoolYear = () => {
+    this.storageService.get('schoolYear')
+      .then(async (schoolYear: any) => {
         if (schoolYear) {
           this.schoolYear = schoolYear;
           this.schoolYearSelect.value = schoolYear.name;
           this.findGroups();
+        } else {
+          this.schoolYear = null;
+          this.schoolYearSelect.value = '';
         }
       });
   }
@@ -78,12 +116,12 @@ export class HomePage {
   }
 
   findGroups = () => {
-    this.loading = true;
+    this.groupLoading = true;
     this.groups = [];
     this.groupsService.findAllBySchoolYearUid(this.schoolYear.uid)
       .subscribe(groups => {
         this.groups = groups;
-        this.loading = false;
+        this.groupLoading = false;
       });
   }
 
@@ -103,6 +141,7 @@ export class HomePage {
         text: 'Agregar',
         handler: (value) => {
           const group: Group = new Group(value.groupName, this.schoolYear.uid);
+          this.groupLoading = true;
           this.groupsService.save(group)
             .then(() => {
               this.toastController.create({
@@ -208,11 +247,11 @@ export class HomePage {
         text: 'Cancelar',
         role: 'cancel',
         icon: 'close',
-        handler: () => {
-          console.log('Cancelar clicked');
-        }
+        handler: () => { }
       }]
     }).then(actionSheet => actionSheet.present());
   }
+
+  showSubscriptionPage = () => this.navController.navigateForward(['/subscription']);
 
 }

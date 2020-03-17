@@ -1,0 +1,39 @@
+<ion-menu contentId="home" menuId="menuProfile">
+  <ion-header>
+    <ion-toolbar color="aula-movil">
+      <ion-chip slot="start" (click)="showProfilePage()">
+        <ion-avatar>
+          <img [src]="getProfileURL()" alt="">
+        </ion-avatar>
+        <ion-label color="light">{{getDisplayName()}}</ion-label>
+      </ion-chip>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list lines="none">
+      <ion-item detail button (click)="showSubscription()">
+        <ion-icon name="card" slot="start"></ion-icon>
+        <ion-label>Subscripción</ion-label>
+      </ion-item>
+      <ion-item-divider></ion-item-divider>
+      <ion-item button detail (click)="showHelpPage()">
+        <ion-icon name="help-buoy" slot="start"></ion-icon>
+        <ion-label>Ayuda y comentarios</ion-label>
+      </ion-item>
+      <ion-item button (click)="showAboutComponent()">
+        <ion-icon name="information" slot="start"></ion-icon>
+        <ion-label>Acerca de Aula Movil</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button color="danger" (click)="signOut()">
+          <ion-icon name="log-out"></ion-icon>
+          <ion-label>Salir</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>
+</ion-menu>
