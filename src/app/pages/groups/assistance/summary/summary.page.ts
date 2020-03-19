@@ -67,7 +67,10 @@ export class SummaryPage {
       this.assistances = assistances;
       this.barChartLabels = dates.map(date => moment(date).locale('es').format('dd DD, MMM'));
       this.barChartData = [{
-        data: assistances.map(assistance => assistance.students.length),
+        data: dates.map(date => {
+          const assistanceFound = assistances.find(assistance => assistance.uid === date);
+          return assistanceFound ? assistanceFound.students.length : 0;
+        }),
         barThickness: 40
       }];
   })
@@ -101,13 +104,11 @@ export class SummaryPage {
   }
 
   copyCurrentAssistances = () => {
-    console.log(this.assistances);
     const description = `Inasistencias Grupo ${this.groupsService.group.name}:` + this.assistances.map(assistance => {
       const date = '\r\n' + moment(assistance.uid).locale('es').format('dddd DD [de] MMMM, YYYY') + '\r\n';
       const students = assistance.students.map(student => `${student.displayName} ${student.displayLastName}`);
       return date + students.join('\r\n');
     }).join('');
-    console.log(description);
     Clipboard.write({
       string: description
     }).then(() => {
