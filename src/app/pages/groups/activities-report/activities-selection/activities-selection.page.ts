@@ -158,4 +158,10 @@ export class ActivitiesSelectionPage implements OnInit {
     }
   }
 
+  selectAllActivities = (event: CustomEvent) => this.activitiesCheckbox .forEach(checkbox => {
+      if (checkbox.name !== 'noDueDate') {
+        checkbox.checked = event.detail.checked;
+      }
+    })
+
 }

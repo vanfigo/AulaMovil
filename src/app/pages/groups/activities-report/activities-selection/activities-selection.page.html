@@ -28,13 +28,17 @@
     </ion-item>
     <ion-item>
       <ion-label>Actividades sin fecha</ion-label>
-      <ion-checkbox slot="end" (ionChange)="findActivities()" #noDueDateCheckbox></ion-checkbox>
+      <ion-checkbox slot="end" (ionChange)="findActivities()" #noDueDateCheckbox name="noDueDate"></ion-checkbox>
     </ion-item>
   </ion-list>
   <ion-searchbar placeholder="Busca actividades" class="ion-padding"
                  cancelButtonIcon (ionChange)="filterActivities($event)"></ion-searchbar>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
   <ion-list *ngIf="!loading">
+    <ion-item *ngIf="activities?.length > 0">
+      <ion-label></ion-label>
+      <ion-toggle (ionChange)="selectAllActivities($event)"></ion-toggle> Todas
+    </ion-item>
     <app-empty-list *ngIf="activities?.length === 0" emptyText="No se encontraron actividades" [displayBadge]="true"></app-empty-list>
     <ion-item *ngFor="let activity of activities">
       <ion-chip slot="start">

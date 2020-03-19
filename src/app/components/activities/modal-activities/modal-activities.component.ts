@@ -3,6 +3,7 @@ import {ModalController, ToastController} from '@ionic/angular';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Activity} from '../../../models/activity.class';
 import {ActivitiesService} from '../../../services/activities.service';
+import {DocumentSnapshot} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-modal-activities',
@@ -37,7 +38,9 @@ export class ModalActivitiesComponent implements OnInit {
       this.activitiesService.update(this.activity).then(() => this.presentToast(this.activity));
     } else {
       const activity: Activity = new Activity(name, truncatedDate);
-      this.activitiesService.save(activity).then(() => this.presentToast(activity));
+      this.activitiesService.save(activity)
+        .then((activityRef) => activityRef.get())
+        .then((storedActivity: DocumentSnapshot<Activity>) => this.presentToast(storedActivity.data()));
     }
   }
 

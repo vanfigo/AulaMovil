@@ -27,6 +27,7 @@ import {DeactivatableComponent} from '../../interfaces/deactivable-component.int
 export class HomePage implements DeactivatableComponent {
 
   groups: Group[];
+  filteredGroups: Group[];
   schoolYear: SchoolYear;
   subscriptionSub = new Subscription();
   hasActiveSubscription = true;
@@ -121,6 +122,7 @@ export class HomePage implements DeactivatableComponent {
     this.groupsService.findAllBySchoolYearUid(this.schoolYear.uid)
       .subscribe(groups => {
         this.groups = groups;
+        this.filteredGroups = groups;
         this.groupLoading = false;
       });
   }
@@ -253,5 +255,15 @@ export class HomePage implements DeactivatableComponent {
   }
 
   showSubscriptionPage = () => this.navController.navigateForward(['/subscription']);
+
+  filterGroups = (event: CustomEvent) => {
+    const filterValue: string = event.detail.value.toLowerCase();
+    if (filterValue.length > 0) {
+      this.groups = this.filteredGroups.filter(group => filterValue.split(' ').every(filter =>
+        group.name.toLowerCase().indexOf(filter) >= 0 ));
+    } else {
+      this.groups = [...this.filteredGroups];
+    }
+  }
 
 }
