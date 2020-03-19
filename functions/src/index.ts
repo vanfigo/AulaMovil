@@ -99,26 +99,30 @@ exports.recurringPayment = functions.https.onRequest((req, resp) => {
 
 exports.updateStudentsTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/students/{studentUid}')
   .onWrite((snapshot, context) => {
-    const studentRef = snapshot.after.ref;
-    const studentCollection = studentRef.parent;
-    if (studentRef.parent.parent) {
-      const groupRef = studentRef.parent.parent;
-      return studentCollection.listDocuments().then((documents) =>
-        groupRef.update({students: documents.length})
-      ).catch(console.error);
+    if (snapshot.after.exists) {
+      const studentRef = snapshot.after.ref;
+      const studentCollection = studentRef.parent;
+      if (studentRef.parent.parent) {
+        const groupRef = studentRef.parent.parent;
+        return studentCollection.listDocuments().then((documents) =>
+          groupRef.update({students: documents.length})
+        ).catch(console.error);
+      }
     }
     return null;
 });
 
 exports.updateActivitiesTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/activities/{activityUid}')
   .onWrite((snapshot, context) => {
-    const activityRef = snapshot.after.ref;
-    const activitiesCollection = activityRef.parent;
-    if (activityRef.parent.parent) {
-      const groupRef = activityRef.parent.parent;
-      return activitiesCollection.listDocuments().then((documents) =>
-        groupRef.update({activities: documents.length})
-      ).catch(console.error);
+    if (snapshot.after.exists) {
+      const activityRef = snapshot.after.ref;
+      const activitiesCollection = activityRef.parent;
+      if (activityRef.parent.parent) {
+        const groupRef = activityRef.parent.parent;
+        return activitiesCollection.listDocuments().then((documents) =>
+          groupRef.update({activities: documents.length})
+        ).catch(console.error);
+      }
     }
     return null;
   });
