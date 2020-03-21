@@ -21,6 +21,8 @@ export class GroupsService {
 
   group: Group;
   collectionName = 'groups';
+  studentsCollectionName = 'students';
+  activitiesCollectionName = 'activities';
 
   constructor(private db: AngularFirestore,
               private authService: AuthService) {
@@ -29,6 +31,15 @@ export class GroupsService {
   getDocumentUser = () => this.db.collection('users').doc(this.authService.user.uid);
 
   getCollectionGroup = () => this.db.collection('users').doc(this.authService.user.uid).collection(this.collectionName);
+
+  findAll = () => this.getDocumentUser().collection(this.collectionName, ref => ref.orderBy('schoolYear').orderBy('name'))
+    .get().pipe(map((snapshot: QuerySnapshot<Group>) =>
+      snapshot.docs.map((document: QueryDocumentSnapshot<Group>) => {
+        const group: Group = document.data();
+        const uid: string = document.id;
+        return { ...group, uid};
+      })
+    ))
 
   findByUid = (groupUid: string) => this.getCollectionGroup().doc(groupUid)
     .get().pipe(map((document: DocumentSnapshot<Group>) => {
@@ -77,5 +88,23 @@ export class GroupsService {
     batch.delete(this.getCollectionGroup().doc(groupUid).ref);
     await batch.commit();
   }
+
+  transferStudents = (originUid: string, destinyUid: string) =>
+    this.getCollectionGroup().doc(originUid).collection(this.studentsCollectionName)
+      .get().pipe(map((snapshot: QuerySnapshot<Student>): Student[] =>
+      snapshot.docs.map((document: QueryDocumentSnapshot<Student>) => {
+        const student = document.data();
+        return {...student, creationDate: new Date()};
+      }))).toPromise().then((students: Student[]) => students.forEach(student =>
+      this.getCollectionGroup().doc(destinyUid).collection(this.studentsCollectionName).add({...student})))
+
+  transferActivities = (originUid: string, destinyUid: string) =>
+    this.getCollectionGroup().doc(originUid).collection(this.activitiesCollectionName)
+      .get().pipe(map((snapshot: QuerySnapshot<Activity>): Activity[] =>
+      snapshot.docs.map((document: QueryDocumentSnapshot<Activity>) => {
+        const activity = document.data();
+        return {...activity, creationDate: new Date(), grades: [], status: 0};
+      }))).toPromise().then((activities: Activity[]) => activities.forEach(activity =>
+      this.getCollectionGroup().doc(destinyUid).collection(this.activitiesCollectionName).add({...activity})))
 
 }

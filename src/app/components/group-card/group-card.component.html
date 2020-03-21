@@ -1,0 +1,30 @@
+<ion-card class="ion-margin" (click)="groupSelected.emit(group)" [button]="actions">
+  <ion-card-header class="aula-movil-groups-cover" [style.background-image]="group.backgroundCover | uriSanitizer">
+    <ion-card-subtitle color="light">{{group.creationDate.toDate() | date: 'mediumDate'}}</ion-card-subtitle>
+    <ion-card-title color="light">{{group.name}}</ion-card-title><ion-fab horizontal="end" vertical="center" (click)="$event.stopPropagation()">
+    <ion-fab-button color="light" size="small" *ngIf="actions">
+      <ion-icon color="aula-movil" name="settings-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="start">
+      <ion-fab-button (click)="editGroup.emit(group)">
+        <ion-icon name="create"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="deleteGroup.emit(group)" color="danger">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+  </ion-card-header>
+  <ion-card-content class="ion-no-padding">
+    <ion-list class="ion-no-padding">
+      <ion-item>
+        <ion-label>Alumnos</ion-label>
+        <ion-note slot="end" color="aula-movil">{{group.students}}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Actividades</ion-label>
+        <ion-note slot="end" color="aula-movil">{{group.activities}}</ion-note>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>

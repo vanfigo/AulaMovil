@@ -105,6 +105,7 @@ exports.updateStudentsTotal = functions.firestore.document('users/{userUid}/grou
       const groupRef = studentRef.parent.parent;
       return studentCollection.listDocuments().then((documents) =>
         groupRef.update({students: documents.length})
+          .catch(console.error)
       ).catch(console.error);
     }
     return null;
@@ -118,6 +119,7 @@ exports.updateActivitiesTotal = functions.firestore.document('users/{userUid}/gr
       const groupRef = activityRef.parent.parent;
       return activitiesCollection.listDocuments().then((documents) =>
         groupRef.update({activities: documents.length})
+          .catch(console.error)
       ).catch(console.error);
     }
     return null;

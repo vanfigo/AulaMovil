@@ -4,10 +4,10 @@ import {FormsModule} from '@angular/forms';
 
 import {IonicModule} from '@ionic/angular';
 
-import {HomePageRoutingModule} from './home-routing.module';
+import {TransferPageRoutingModule} from './transfer-routing.module';
 
-import {HomePage} from './home.page';
-import {MenuModule} from '../../components/menu/menu.module';
+import {TransferPage} from './transfer.page';
+import {ModalGroupsModule} from '../../components/modal-groups/modal-groups.module';
 import {PipesModule} from '../../pipes/pipes.module';
 import {GroupCardModule} from '../../components/group-card/group-card.module';
 
@@ -16,11 +16,11 @@ import {GroupCardModule} from '../../components/group-card/group-card.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule,
-    MenuModule,
-    PipesModule,
-    GroupCardModule
+    TransferPageRoutingModule,
+    ModalGroupsModule,
+    GroupCardModule,
+    PipesModule
   ],
-  declarations: [HomePage]
+  declarations: [TransferPage]
 })
-export class HomePageModule {}
+export class TransferPageModule {}
