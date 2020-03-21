@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'profile', loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule) },
   { path: 'subscription', loadChildren: () => import('./pages/subscription/subscription.module').then(m => m.SubscriptionModule) },
   { path: 'help', loadChildren: () => import('./pages/help/help.module').then( m => m.HelpPageModule) },
+  { path: 'transfer', loadChildren: () => import('./pages/transfer/transfer.module').then( m => m.TransferPageModule) },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 

@@ -25,22 +25,21 @@ export class MenuComponent implements OnInit {
   getDisplayName = () => this.authService.user ? (this.authService.user.displayName ?
     this.authService.user.displayName : this.authService.user.email) : ''
 
-  showProfilePage = () => {
-    this.navController.navigateForward(['../profile'], { relativeTo: this.activatedRoute })
-      .then(() => this.menuController.close());
-  }
+  showProfilePage = () => this.navController
+    .navigateForward(['../profile'], { relativeTo: this.activatedRoute }).then(() => this.menuController.close())
 
-  showSubscription = () => {
-    this.navController.navigateForward(['../subscription'], { relativeTo: this.activatedRoute })
-      .then(() => this.menuController.close());
-  }
+  showSubscription = () => this.navController
+    .navigateForward(['../subscription'], { relativeTo: this.activatedRoute }).then(() => this.menuController.close())
 
   showAboutComponent = () => this.modalController.create({
     component: AboutComponent
   }).then(modal => modal.present().then(() => this.menuController.close()))
 
-  showHelpPage = () => this.navController.navigateForward(['../help'], { relativeTo: this.activatedRoute })
-    .then(() => this.menuController.close())
+  showHelpPage = () => this.navController
+    .navigateForward(['../help'], { relativeTo: this.activatedRoute }).then(() => this.menuController.close())
+
+  showTransferPage = () => this.navController
+    .navigateForward(['../transfer'], { relativeTo: this.activatedRoute }).then(() => this.menuController.close())
 
   signOut = () => this.menuController.close().then(this.authService.signOut);
 

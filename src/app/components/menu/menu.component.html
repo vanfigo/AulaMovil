@@ -15,7 +15,16 @@
         <ion-icon name="card" slot="start"></ion-icon>
         <ion-label>Subscripción</ion-label>
       </ion-item>
-      <ion-item-divider></ion-item-divider>
+      <ion-item-divider>
+        <ion-label>Herramientas</ion-label>
+      </ion-item-divider>
+      <ion-item button detail (click)="showTransferPage()">
+        <ion-icon name="share" slot="start"></ion-icon>
+        <ion-label>Transferir recursos</ion-label>
+      </ion-item>
+      <ion-item-divider>
+        <ion-label>Información</ion-label>
+      </ion-item-divider>
       <ion-item button detail (click)="showHelpPage()">
         <ion-icon name="help-buoy" slot="start"></ion-icon>
         <ion-label>Ayuda y comentarios</ion-label>

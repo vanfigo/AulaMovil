@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-buttons slot="start">
+      <ion-button (click)="modalController.dismiss()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Selecciona un grupo</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list lines="full">
+    <span *ngFor="let groupBySchoolYear of groupsBySchoolYear">
+      <ion-list-header mode="ios">{{groupBySchoolYear.schoolYear | schoolYear}}</ion-list-header>
+      <ion-item *ngFor="let group of groupBySchoolYear.groups" button (click)="selectGroup(group)">
+        <ion-icon slot="start" name="people-circle"></ion-icon>
+        <ion-label>
+          <h2>{{group.name}}</h2>
+          <p>Alumnos: {{group.students}}</p>
+          <p>Actividades: {{group.activities}}</p>
+        </ion-label>
+      </ion-item>
+    </span>
+  </ion-list>
+</ion-content>
